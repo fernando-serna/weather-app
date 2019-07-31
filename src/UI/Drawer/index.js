@@ -10,7 +10,7 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
-import MenuIcon from '@material-ui/core/Menu'
+import MenuIcon from '@material-ui/icons/Menu'
 import Toolbar from '@material-ui/core/Toolbar'
 
 const drawerWidth = 200
@@ -29,7 +29,8 @@ const useStyles = makeStyles(theme => ({
     marginLeft: drawerWidth,
     [theme.breakpoints.up('sm')]: {
       width: `calc(100% - ${drawerWidth}px)`
-    }
+    },
+    background: '#373d48'
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -39,18 +40,17 @@ const useStyles = makeStyles(theme => ({
   },
   toolbar: theme.mixins.toolbar,
   drawerPaper: {
-    width: drawerWidth
-  },
-  content: {
-    flexGrow: 1,
-    padding: theme.spacing(3)
+    width: drawerWidth,
+    background: '#373d48'
   }
 }))
 
 export const DrawerComponent = () => {
   const classes = useStyles()
   const theme = useTheme()
-  const [mobileOpen, setMobileOpen] = React.useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false)
+
+  console.log({ theme })
 
   function handleDrawerToggle() {
     setMobileOpen(!mobileOpen)
@@ -61,12 +61,12 @@ export const DrawerComponent = () => {
       <div className={classes.toolbar} />
       <Divider />
       <List>
-        {['Today', 'Hourly', '16 Day', 'Calendar'].map((text, index) => (
+        {['Today', 'Hourly', '16-Day', 'Calendar'].map(text => (
           <ListItem button key={text}>
             <ListItemIcon>
               <MenuIcon />
             </ListItemIcon>
-            <ListItemText primary={text} />
+            <ListItemText style={{ color: 'white' }} primary={text} />
           </ListItem>
         ))}
       </List>

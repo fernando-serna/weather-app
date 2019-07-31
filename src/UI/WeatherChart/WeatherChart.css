@@ -1,0 +1,25 @@
+.wc-wrapper {
+  height: 100%;
+  border: 1px solid magenta;
+  display: grid;
+  grid-template-rows: 50px 1fr;
+  grid-template-areas:
+    'wc-buttons'
+    'wc-chart';
+}
+
+.wc-buttons {
+  grid-area: wc-buttons;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  border: 1px solid magenta;
+}
+
+.wc-chart {
+  grid-area: wc-chart;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  border: 1px solid magenta;
+}

@@ -1,0 +1,14 @@
+.forecast-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.forecast-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.forecast-temp {
+  display: flex;
+}
