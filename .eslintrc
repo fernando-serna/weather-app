@@ -1,0 +1,75 @@
+{
+  "env": {
+    "browser": true,
+    "jest": true
+  },
+  "parser": "babel-eslint",
+  "plugins": ["prettier"],
+  "extends": "airbnb",
+  "rules": {
+    "arrow-parens": ["error", "as-needed"],
+    "comma-dangle": ["error", "only-multiline"],
+    "consistent-return": ["warn"],
+    "import/prefer-default-export": [0],
+    "jsx-a11y/label-has-for": {
+      "required": {
+        "some": ["nesting", "id"]
+      }
+    },
+    "newline-per-chained-call": ["warn"],
+    "object-curly-newline": [
+      "error",
+      {
+        "consistent": true
+      }
+    ],
+    "react/destructuring-assignment": 0,
+    "react/jsx-filename-extension": [
+      "error",
+      {
+        "extensions": [".js"]
+      }
+    ],
+    "react/jsx-no-duplicate-props": [
+      "error",
+      {
+        "ignoreCase": false
+      }
+    ],
+    "react/jsx-one-expression-per-line": [
+      1,
+      {
+        "allow": "single-child"
+      }
+    ],
+    "react/jsx-wrap-multilines": false,
+    "react/no-multi-comp": false,
+    "react/sort-comp": [
+      1,
+      {
+        "order": [
+          "static-methods",
+          "instance-variables",
+          "lifecycle",
+          "getters",
+          "setters",
+          "/^(handle|on).+$/",
+          "everything-else",
+          "render"
+        ]
+      }
+    ],
+    "semi": [
+      "error",
+      "never",
+      {
+        "beforeStatementContinuationChars": "always"
+      }
+    ]
+  },
+  "settings": {
+    "import/resolver": {
+      "babel-module": {}
+    }
+  }
+}
