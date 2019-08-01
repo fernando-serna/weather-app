@@ -18,8 +18,14 @@ import Thunderstorm from '../../Icons/Thunderstorm'
 
 import './Forecast.css'
 
+const cardWidth = 200
+
 const useStyles = makeStyles(theme => ({
   card: {
+    [theme.breakpoints.up('768')]: {
+      width: cardWidth,
+      flexShrink: 0
+    },
     margin: theme.spacing(1),
     background: theme.palette.primary.dark
   }
@@ -35,9 +41,14 @@ const Forecast = () => {
 
   const myRef = useCallback(node => {
     if (node !== null) {
-      console.log({ node }, node.offsetHeight, node.offsetWidth, 'node')
-      setHeight(node.offsetHeight)
-      setWidth(node.offsetWidth)
+      if (node.offsetHeight <= 150) {
+        setHeight(node.offsetHeight)
+        setWidth(node.offsetWidth / 4)
+      } else {
+        setHeight(node.offsetHeight / 4)
+        setWidth(node.offsetWidth)
+      }
+      console.log(node.offsetWidth, node.offsetHeight)
     }
   }, [])
 
@@ -53,14 +64,9 @@ const Forecast = () => {
       )
     }
 
-    console.log({ days, theme })
     setWeek(days)
     setSelectedDay(days[0])
   }, [])
-
-  useEffect(() => {
-    console.log({ selectedDay })
-  })
 
   return (
     <div className="forecast">
@@ -68,19 +74,26 @@ const Forecast = () => {
         <Card key={day} raised={day === selectedDay} className={classes.card}>
           <CardActionArea onClick={() => setSelectedDay(day)}>
             <div ref={myRef} className="forecast-card">
+              {height && width ? (
+                <Cloudy fill="orange" height={height} width={width} />
+              ) : null}
               <Typography
                 color={day === selectedDay ? 'primary' : 'secondary'}
                 variant={day === selectedDay ? 'h5' : 'h6'}
               >
                 {day}
               </Typography>
-              {height && width ? <Cloudy fill="orange" height={height} width={width} /> : null}
-              {/* <Cloudy fill="orange" /> */}
               <div className="forecast-temp">
-                <Typography color="secondary" variant="body1">
+                <Typography
+                  color={day === selectedDay ? 'primary' : 'secondary'}
+                  variant="h6"
+                >
                   73&deg; |&nbsp;
                 </Typography>
-                <Typography color="secondary" variant="body1">
+                <Typography
+                  color={day === selectedDay ? 'primary' : 'secondary'}
+                  variant="h6"
+                >
                   58&deg;
                 </Typography>
               </div>

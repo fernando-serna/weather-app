@@ -12,7 +12,7 @@ const CurrentWeather = () => {
 
   const myRef = useCallback(node => {
     if (node !== null) {
-      setHeight(node.offsetHeight / 4)
+      setHeight(node.offsetHeight / 2)
       setWidth(node.offsetWidth / 2)
     }
   }, [])
@@ -23,20 +23,22 @@ const CurrentWeather = () => {
         <Typography color="primary" variant="h4">
           Redmond, WA
         </Typography>
-        <Typography color="primary" variant="h6">
+        <Typography color="secondary" variant="h6">
           {moment(new Date()).format('dddd h:mm A')}
         </Typography>
-        <Typography color="primary" variant="h6">
+        <Typography color="secondary" variant="h6">
           Forecast
         </Typography>
       </div>
       <div ref={myRef} className="cw-temp">
-        {height && width ? <DayCloudy fill="orange" height={height} width={width} /> : null}
+        {height && width ? (
+          <DayCloudy fill="orange" height={height} width={width} />
+        ) : null}
         <div style={{ display: 'flex' }}>
-          <Typography color="primary" variant="h2">
+          <Typography color="primary" variant="h3">
             74
           </Typography>
-          <Typography color="primary" variant="h6">
+          <Typography color="primary" variant="body1">
             &#8457;
           </Typography>
         </div>
