@@ -26,14 +26,23 @@ const useStyles = makeStyles(theme => ({
       width: cardWidth,
       flexShrink: 0
     },
+    [theme.breakpoints.up('1025')]: {
+      width: 'calc(100% / 8)',
+      flexShrink: 0
+    },
     margin: theme.spacing(1),
     background: theme.palette.primary.dark
+  },
+  text: {
+    color: theme.palette.secondary.light
+  },
+  selectedText: {
+    color: theme.palette.secondary.dark
   }
 }))
 
 const Forecast = () => {
   const classes = useStyles()
-  const theme = useTheme()
   const [week, setWeek] = useState([])
   const [selectedDay, setSelectedDay] = useState(null)
   const [height, setHeight] = useState(0)
@@ -48,7 +57,6 @@ const Forecast = () => {
         setHeight(node.offsetHeight / 4)
         setWidth(node.offsetWidth)
       }
-      console.log(node.offsetWidth, node.offsetHeight)
     }
   }, [])
 
@@ -78,20 +86,26 @@ const Forecast = () => {
                 <Cloudy fill="orange" height={height} width={width} />
               ) : null}
               <Typography
-                color={day === selectedDay ? 'primary' : 'secondary'}
+                className={
+                  day === selectedDay ? classes.selectedText : classes.text
+                }
                 variant={day === selectedDay ? 'h5' : 'h6'}
               >
                 {day}
               </Typography>
               <div className="forecast-temp">
                 <Typography
-                  color={day === selectedDay ? 'primary' : 'secondary'}
+                  className={
+                    day === selectedDay ? classes.selectedText : classes.text
+                  }
                   variant="h6"
                 >
                   73&deg; |&nbsp;
                 </Typography>
                 <Typography
-                  color={day === selectedDay ? 'primary' : 'secondary'}
+                  className={
+                    day === selectedDay ? classes.selectedText : classes.text
+                  }
                   variant="h6"
                 >
                   58&deg;

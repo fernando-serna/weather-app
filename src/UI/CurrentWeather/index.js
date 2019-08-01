@@ -12,8 +12,13 @@ const CurrentWeather = () => {
 
   const myRef = useCallback(node => {
     if (node !== null) {
-      setHeight(node.offsetHeight / 2)
-      setWidth(node.offsetWidth / 2)
+      if (node.offsetWidth > 600 && node.offsetHeight < 200) {
+        setHeight(node.offsetHeight)
+        setWidth(node.offsetWidth / 3)
+      } else {
+        setHeight(node.offsetHeight / 2)
+        setWidth(node.offsetWidth / 2)
+      }
     }
   }, [])
 
