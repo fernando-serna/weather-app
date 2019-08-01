@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import moment from 'moment'
 
 import { makeStyles, useTheme } from '@material-ui/core/styles'
@@ -30,6 +30,16 @@ const Forecast = () => {
   const theme = useTheme()
   const [week, setWeek] = useState([])
   const [selectedDay, setSelectedDay] = useState(null)
+  const [height, setHeight] = useState(0)
+  const [width, setWidth] = useState(0)
+
+  const myRef = useCallback(node => {
+    if (node !== null) {
+      console.log({ node }, node.offsetHeight, node.offsetWidth, 'node')
+      setHeight(node.offsetHeight)
+      setWidth(node.offsetWidth)
+    }
+  }, [])
 
   useEffect(() => {
     const days = []
@@ -53,18 +63,19 @@ const Forecast = () => {
   })
 
   return (
-    <div className="forecast-wrapper">
+    <div className="forecast">
       {week.map(day => (
         <Card key={day} raised={day === selectedDay} className={classes.card}>
           <CardActionArea onClick={() => setSelectedDay(day)}>
-            <div className="forecast-card">
+            <div ref={myRef} className="forecast-card">
               <Typography
                 color={day === selectedDay ? 'primary' : 'secondary'}
                 variant={day === selectedDay ? 'h5' : 'h6'}
               >
                 {day}
               </Typography>
-              <Cloudy fill="orange" />
+              {height && width ? <Cloudy fill="orange" height={height} width={width} /> : null}
+              {/* <Cloudy fill="orange" /> */}
               <div className="forecast-temp">
                 <Typography color="secondary" variant="body1">
                   73&deg; |&nbsp;

@@ -18,7 +18,7 @@ const WeatherChart = () => {
   const classes = useStyles()
 
   return (
-    <div className="wc-wrapper">
+    <div className="weatherChart">
       <div className="wc-buttons">
         <Button variant="outlined" color="primary" className={classes.button}>
           Temperature

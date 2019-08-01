@@ -5,10 +5,27 @@
 
 .forecast-card {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
 }
 
 .forecast-temp {
-  display: flex;
+  /* display: flex; */
+}
+
+.forecast {
+  height: 100%;
+  overflow-y: scroll;
+  grid-area: forecast;
+  /* justify-self: center; */
+  border: 1px solid blue;
+  /* width: 75%; */
+}
+
+@media screen and (min-width: 800px) {
+  .forecast {
+    display: flex;
+    justify-content: space-between;
+    overflow: hidden;
+  }
 }

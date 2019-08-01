@@ -1,7 +1,7 @@
 import React from 'react'
 
 const Footer = () => (
-  <div>
+  <div className="footer">
     Icons provided by&nbsp;
     <a href="https://www.flaticon.com/authors/freepik" title="Freepik">
       Freepik

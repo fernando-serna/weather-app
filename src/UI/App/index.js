@@ -9,18 +9,16 @@ import './App.css'
 
 const App = () => (
   <div className="App">
-    <div className="currentWeather">
-      <CurrentWeather />
-    </div>
-    <div className="weatherChart">
-      <WeatherChart />
-    </div>
-    <div className="forecast">
-      <Forecast />
-    </div>
-    <div className="footer">
-      <Footer />
-    </div>
+    {/* <div className="currentWeather"> */}
+    <CurrentWeather />
+    {/* </div> */}
+    {/* <div className="weatherChart"> */}
+    <WeatherChart />
+    {/* </div> */}
+    {/* <div className="forecast"> */}
+    <Forecast />
+    {/* </div> */}
+    <Footer />
   </div>
 )
 

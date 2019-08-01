@@ -8,6 +8,14 @@
     'wc-chart';
 }
 
+.weatherChart {
+  grid-area: weatherChart;
+  /* justify-self: center; */
+  border: 1px solid blue;
+  display: none;
+  /* width: 75%; */
+}
+
 .wc-buttons {
   grid-area: wc-buttons;
   display: flex;
@@ -22,4 +30,16 @@
   align-items: center;
   justify-content: space-evenly;
   border: 1px solid magenta;
+}
+
+@media screen and (min-width: 800px) {
+  .weatherChart {
+    height: 100%;
+    border: 1px solid magenta;
+    display: grid;
+    grid-template-rows: 50px 1fr;
+    grid-template-areas:
+      'wc-buttons'
+      'wc-chart';
+  }
 }
