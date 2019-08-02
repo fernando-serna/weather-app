@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React from 'react'
 import moment from 'moment'
 
 import Typography from '@material-ui/core/Typography'
@@ -6,59 +6,42 @@ import DayCloudy from '../../Icons/DayCloudy'
 
 import './CurrentWeather.css'
 
-const CurrentWeather = () => {
-  const [height, setHeight] = useState(0)
-  const [width, setWidth] = useState(0)
-
-  const myRef = useCallback(node => {
-    if (node !== null) {
-      if (node.offsetWidth > 600 && node.offsetHeight < 200) {
-        setHeight(node.offsetHeight)
-        setWidth(node.offsetWidth / 3)
-      } else {
-        setHeight(node.offsetHeight)
-        setWidth(node.offsetWidth / 2)
-      }
-    }
-  }, [])
-
-  return (
-    <div className="currentWeather">
-      <div className="cw-header">
-        <Typography color="primary" variant="h4">
-          Redmond, WA
+const CurrentWeather = () => (
+  <div className="currentWeather">
+    <div className="cw-header">
+      <Typography color="primary" variant="h4">
+        Redmond, WA
+      </Typography>
+      <Typography color="secondary" variant="h6">
+        {moment(new Date()).format('dddd h:mm A')}
+      </Typography>
+      <Typography color="secondary" variant="h6">
+        Forecast
+      </Typography>
+    </div>
+    <div className="cw-temp">
+      <DayCloudy fill="orange" height={75} width={75} />
+      <div style={{ display: 'flex' }}>
+        <Typography color="primary" variant="h3">
+          74
         </Typography>
-        <Typography color="secondary" variant="h6">
-          {moment(new Date()).format('dddd h:mm A')}
-        </Typography>
-        <Typography color="secondary" variant="h6">
-          Forecast
-        </Typography>
-      </div>
-      <div ref={myRef} className="cw-temp">
-        <DayCloudy fill="orange" height={75} width={75} />
-        <div style={{ display: 'flex' }}>
-          <Typography color="primary" variant="h3">
-            74
-          </Typography>
-          <Typography color="primary" variant="body1">
-            &#8457;
-          </Typography>
-        </div>
-      </div>
-      <div className="cw-env">
-        <Typography color="secondary" variant="h6">
-          Precipitation:
-        </Typography>
-        <Typography color="secondary" variant="h6">
-          Humidity:
-        </Typography>
-        <Typography color="secondary" variant="h6">
-          Wind:
+        <Typography color="primary" variant="body1">
+          &#8457;
         </Typography>
       </div>
     </div>
-  )
-}
+    <div className="cw-env">
+      <Typography color="secondary" variant="h6">
+        Precipitation:
+      </Typography>
+      <Typography color="secondary" variant="h6">
+        Humidity:
+      </Typography>
+      <Typography color="secondary" variant="h6">
+        Wind:
+      </Typography>
+    </div>
+  </div>
+)
 
 export default CurrentWeather

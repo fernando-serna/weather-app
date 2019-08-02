@@ -1,35 +1,15 @@
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import moment from 'moment'
 
 import Typography from '@material-ui/core/Typography'
 import Cloudy from '../../Icons/Cloudy'
-import CloudyGusts from '../../Icons/CloudyGusts'
-import DaySunny from '../../Icons/DaySunny'
-import Hail from '../../Icons/Hail'
-import NightClear from '../../Icons/NightClear'
-import Rain from '../../Icons/Rain'
-import Snow from '../../Icons/Snow'
-import Thunderstorm from '../../Icons/Thunderstorm'
 
 import './Forecast.css'
 
 const Forecast = () => {
   const [week, setWeek] = useState([])
-  const [height, setHeight] = useState(0)
-  const [width, setWidth] = useState(0)
 
-  const myRef = useCallback(node => {
-    if (node !== null) {
-      if (node.offsetHeight <= 150) {
-        setHeight(node.offsetHeight)
-        setWidth(node.offsetWidth / 4)
-      } else {
-        setHeight(node.offsetHeight / 4)
-        setWidth(node.offsetWidth)
-      }
-    }
-  }, [])
-
+  // Hard coded array for days of the week
   useEffect(() => {
     const days = ['Today']
     const day = new Date()
