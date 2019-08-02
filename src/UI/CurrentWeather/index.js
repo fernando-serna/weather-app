@@ -16,7 +16,7 @@ const CurrentWeather = () => {
         setHeight(node.offsetHeight)
         setWidth(node.offsetWidth / 3)
       } else {
-        setHeight(node.offsetHeight / 2)
+        setHeight(node.offsetHeight)
         setWidth(node.offsetWidth / 2)
       }
     }
@@ -36,9 +36,7 @@ const CurrentWeather = () => {
         </Typography>
       </div>
       <div ref={myRef} className="cw-temp">
-        {height && width ? (
-          <DayCloudy fill="orange" height={height} width={width} />
-        ) : null}
+        <DayCloudy fill="orange" height={75} width={75} />
         <div style={{ display: 'flex' }}>
           <Typography color="primary" variant="h3">
             74

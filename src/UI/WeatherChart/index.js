@@ -30,9 +30,7 @@ const WeatherChart = () => {
           Wind
         </Button>
       </div>
-      <div className="wc-chart">
         <Example />
-      </div>
     </div>
   )
 }

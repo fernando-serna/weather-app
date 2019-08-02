@@ -1,12 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import moment from 'moment'
 
-import { makeStyles, useTheme } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
-import Button from '@material-ui/core/Button'
-import Card from '@material-ui/core/Card'
-import CardActionArea from '@material-ui/core/CardActionArea'
-
 import Cloudy from '../../Icons/Cloudy'
 import CloudyGusts from '../../Icons/CloudyGusts'
 import DaySunny from '../../Icons/DaySunny'
@@ -18,33 +13,8 @@ import Thunderstorm from '../../Icons/Thunderstorm'
 
 import './Forecast.css'
 
-const cardWidth = 200
-
-const useStyles = makeStyles(theme => ({
-  card: {
-    [theme.breakpoints.up('768')]: {
-      width: cardWidth,
-      flexShrink: 0
-    },
-    [theme.breakpoints.up('1025')]: {
-      width: 'calc(100% / 8)',
-      flexShrink: 0
-    },
-    margin: theme.spacing(1),
-    background: theme.palette.primary.dark
-  },
-  text: {
-    color: theme.palette.secondary.light
-  },
-  selectedText: {
-    color: theme.palette.secondary.dark
-  }
-}))
-
 const Forecast = () => {
-  const classes = useStyles()
   const [week, setWeek] = useState([])
-  const [selectedDay, setSelectedDay] = useState(null)
   const [height, setHeight] = useState(0)
   const [width, setWidth] = useState(0)
 
@@ -61,10 +31,10 @@ const Forecast = () => {
   }, [])
 
   useEffect(() => {
-    const days = []
+    const days = ['Today']
     const day = new Date()
 
-    for (let i = 0; i < 7; i += 1) {
+    for (let i = 1; i < 7; i += 1) {
       days.push(
         moment(day)
           .add(i, 'days')
@@ -73,56 +43,27 @@ const Forecast = () => {
     }
 
     setWeek(days)
-    setSelectedDay(days[0])
   }, [])
 
   return (
     <div className="forecast">
       {week.map(day => (
-        <Card key={day} raised={day === selectedDay} className={classes.card}>
-          <CardActionArea onClick={() => setSelectedDay(day)}>
-            <div ref={myRef} className="forecast-card">
-              {height && width ? (
-                <Cloudy fill="orange" height={height} width={width} />
-              ) : null}
-              <Typography
-                className={
-                  day === selectedDay ? classes.selectedText : classes.text
-                }
-                variant={day === selectedDay ? 'h5' : 'h6'}
-              >
-                {day}
-              </Typography>
-              <div className="forecast-temp">
-                <Typography
-                  className={
-                    day === selectedDay ? classes.selectedText : classes.text
-                  }
-                  variant="h6"
-                >
-                  73&deg; |&nbsp;
-                </Typography>
-                <Typography
-                  className={
-                    day === selectedDay ? classes.selectedText : classes.text
-                  }
-                  variant="h6"
-                >
-                  58&deg;
-                </Typography>
-              </div>
-            </div>
-          </CardActionArea>
-        </Card>
+        <div key={day} className="forecast-item">
+          <div className="forecast-day">
+            <Typography color="secondary" variant="body1">
+              {day}
+            </Typography>
+          </div>
+          <div className="forecast-icon">
+            <Cloudy fill="orange" height={64} width={64} />
+          </div>
+          <div className="forecast-temp">
+            <Typography color="secondary" variant="body1">
+              73&deg; | 58&deg;
+            </Typography>
+          </div>
+        </div>
       ))}
-      {/* <Cloudy fill="orange" />
-      <CloudyGusts fill="orange" />
-      <DaySunny fill="orange" />
-      <Hail fill="orange" />
-      <NightClear fill="orange" />
-      <Rain fill="orange" />
-      <Snow fill="orange" /> */}
-      {/* <Thunderstorm fill="orange" /> */}
     </div>
   )
 }

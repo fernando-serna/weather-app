@@ -1,5 +1,5 @@
-import React, { useState, useCallback } from 'react'
-import { AreaChart, Area, XAxis, YAxis, Tooltip } from 'recharts'
+import React from 'react'
+import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
 
 const data = [
   {
@@ -46,40 +46,26 @@ const data = [
   }
 ]
 
-const Example = () => {
-  const [height, setHeight] = useState(0)
-  const [width, setWidth] = useState(0)
-
-  const myRef = useCallback(node => {
-    console.log({ node })
-    if (node !== null) {
-      setHeight(node.offsetHeight)
-      setWidth(node.offsetWidth)
-    }
-  }, [])
-
-  return (
-    <div style={{ width: '100%', height: '100%' }} ref={myRef}>
-      {!!height && !!width ? (
-        <AreaChart
-          width={width}
-          height={height}
-          data={data}
-          margin={{
-            top: 10,
-            right: 30,
-            left: 0,
-            bottom: 0
-          }}
-        >
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
-          <Area type="monotone" dataKey="uv" stroke="#03a9f4" fill="#03a9f4" />
-        </AreaChart>
-      ) : null}
-    </div>
-  )
-}
+const Example = () => (
+  <div className="wc-chart" style={{ width: '100%', height: 300 }}>
+    <ResponsiveContainer width="99%">
+      <AreaChart
+        width={500} height={300}
+        data={data}
+        margin={{
+          top: 10,
+          right: 30,
+          left: 0,
+          bottom: 0
+        }}
+      >
+        <XAxis dataKey="name" />
+        <YAxis />
+        <Tooltip />
+        <Area type="monotone" dataKey="uv" stroke="#03a9f4" fill="#03a9f4" />
+      </AreaChart>
+    </ResponsiveContainer>
+  </div>
+)
 
 export default Example
