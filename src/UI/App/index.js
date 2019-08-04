@@ -9,15 +9,31 @@ import './App.css'
 const App = () => {
   const { state, dispatch } = React.useContext(Store)
   const weatherApiKey = 'bcce35b25122edecf0adb53cdda3f218'
+  const zipApiKey = 'js-8VJ3dpo17MwCTKBwNR5T7H0Am37wT36CC9mKYxI2JT5AR9S4cxx2fph08ioe0CQ6'
 
-  const fetchCurrentWeather = async zip => {
-    const weatherUrl = `http://api.openweathermap.org/data/2.5/weather?zip=98007,us&units=imperial&APPID=${weatherApiKey}`
+  const fetchWeather = async zip => {
+    const zipUrl = `https://www.zipcodeapi.com/rest/${zipApiKey}/info.json/98930/degrees`
+
+    const zipData = await fetch(zipUrl)
+    const zipDataJSON = await zipData.json()
+
+    const { lat, lng } = zipDataJSON
+
+    console.log({ lat, lng })
+
+    const weatherUrl = `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&units=imperial&APPID=${weatherApiKey}`
+    const forecastUrl = `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lng}&units=imperial&APPID=${weatherApiKey}`
+
+
     const weatherData = await fetch(weatherUrl)
     const weatherDataJSON = await weatherData.json()
 
+    const forecastData = await fetch(forecastUrl)
+    const forecastDataJSON = await forecastData.json()
+
     return dispatch({
-      type: 'FETCH_CURRENT_WEATHER',
-      payload: weatherDataJSON
+      type: 'FETCH_WEATHER',
+      payload: { ...weatherDataJSON, ...forecastDataJSON, ...zipDataJSON }
     })
   }
 
@@ -31,7 +47,7 @@ const App = () => {
   // };
 
   useEffect(() => {
-    Object.keys(state.currentWeather).length === 0 && fetchCurrentWeather()
+    Object.keys(state.weather).length === 0 && fetchWeather()
   })
 
   useEffect(() => {
@@ -40,9 +56,9 @@ const App = () => {
 
   return (
     <div className="App">
-      {Object.keys(state.currentWeather).length ? <CurrentWeather weather={state.currentWeather} /> : null}
+      <CurrentWeather weather={state.weather} />
       <WeatherChart />
-      <Forecast />
+      <Forecast weather={state.weather} />
     </div>
   )
 }

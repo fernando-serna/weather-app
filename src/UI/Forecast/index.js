@@ -6,32 +6,86 @@ import Cloudy from '../../Icons/Cloudy'
 
 import './Forecast.css'
 
-const Forecast = () => {
-  const [week, setWeek] = useState([])
+const Forecast = props => {
+  const { weather } = props
+  const [forecast, setForecast] = useState([])
 
-  // Hard coded array for days of the week
+  const formatDay = dt => moment(dt).format('dddd')
+
   useEffect(() => {
-    const days = ['Today']
     const day = new Date()
+    const week = []
 
-    for (let i = 1; i < 7; i += 1) {
-      days.push(
-        moment(day)
-          .add(i, 'days')
-          .format('dddd')
-      )
+    for (let i = 0; i < 6; i += 1) {
+      week.push({
+        name: moment(day).add(i, 'days').format('dddd'),
+        high: Number.NEGATIVE_INFINITY,
+        low: Number.POSITIVE_INFINITY
+      })
     }
 
-    setWeek(days)
+    setForecast(week)
   }, [])
+
+  useEffect(() => {
+    if (Object.keys(weather).length) {
+      const { dt, list } = weather
+      let forecastWeek = [...forecast]
+      let dayOfWeek = new Date(dt * 1000)
+
+      list.forEach(reading => {
+        const readingDate = new Date(reading.dt * 1000)
+        const forecastDay = { ...forecastWeek.find(x => x.name === formatDay(readingDate)) }
+        const { temp } = reading.main
+
+        if (moment(dayOfWeek).isSame(readingDate, 'date')) {
+          forecastDay.high = Math.max(forecastDay.high, temp)
+          forecastDay.low = Math.min(forecastDay.low, temp)
+        } else {
+          dayOfWeek = readingDate
+          forecastDay.high = temp
+          forecastDay.low = temp
+        }
+
+        console.log({ day: formatDay(readingDate), temp, main: reading.main })
+        forecastWeek = [...forecastWeek.filter(x => x.name !== formatDay(readingDate)), forecastDay]
+      })
+
+      setForecast(forecastWeek)
+    }
+  }, [weather])
+
+  // Hard coded array for days of the week
+  // useEffect(() => {
+  //   const day = new Date(dt * 1000)
+  //   const forecast = {}
+
+  //   list.forEach(reading => {
+  //     const dayOfWeek = moment(day).format('dddd')
+
+  //     if (moment(day).isSame(moment(reading.dt * 1000), 'date')) {
+  //       forecast[dayOfWeek] = {}
+  //     }
+  //   })
+
+  //   for (let i = 1; i < 6; i += 1) {
+  //     days.push(
+  //       moment(day)
+  //         .add(i, 'days')
+  //         .format('dddd')
+  //     )
+  //   }
+
+  //   setWeek(days)
+  // }, [])
 
   return (
     <div className="forecast">
-      {week.map(day => (
-        <div key={day} className="forecast-item">
+      {forecast.map(day => (
+        <div key={day.name} className="forecast-item">
           <div className="forecast-day">
             <Typography color="secondary" variant="body1">
-              {day}
+              {day.name}
             </Typography>
           </div>
           <div className="forecast-icon">
@@ -39,7 +93,11 @@ const Forecast = () => {
           </div>
           <div className="forecast-temp">
             <Typography color="secondary" variant="body1">
-              73&deg; | 58&deg;
+              {Math.round(day.high)}
+              &deg;
+              |&nbsp;
+              {Math.round(day.low)}
+              &deg;
             </Typography>
           </div>
         </div>
