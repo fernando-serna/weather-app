@@ -20,7 +20,7 @@ const Forecast = props => {
     const day = new Date()
     const week = []
 
-    for (let i = 0; i < 6; i += 1) {
+    for (let i = 1; i < 6; i += 1) {
       week.push({
         name: moment(day).add(i, 'days').format('dddd'),
         high: Number.NEGATIVE_INFINITY,
@@ -37,6 +37,13 @@ const Forecast = props => {
       const { dt, list } = weather
       let forecastWeek = [...forecast]
       let dayOfWeek = new Date(dt * 1000)
+
+      forecastWeek.unshift({
+        name: formatDay(dayOfWeek),
+        high: weather.main.temp,
+        low: weather.main.temp,
+        icon: weather.weather[0].icon
+      })
 
       list.forEach(reading => {
         const readingDate = new Date(reading.dt * 1000)

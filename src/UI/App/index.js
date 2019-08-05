@@ -12,7 +12,7 @@ const App = () => {
   const zipApiKey = 'js-8VJ3dpo17MwCTKBwNR5T7H0Am37wT36CC9mKYxI2JT5AR9S4cxx2fph08ioe0CQ6'
 
   const fetchWeather = async zip => {
-    const zipUrl = `https://www.zipcodeapi.com/rest/${zipApiKey}/info.json/98930/degrees`
+    const zipUrl = `https://www.zipcodeapi.com/rest/${zipApiKey}/info.json/98007/degrees`
 
     const zipData = await fetch(zipUrl)
     const zipDataJSON = await zipData.json()
