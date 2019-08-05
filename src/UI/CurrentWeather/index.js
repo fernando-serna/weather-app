@@ -4,14 +4,13 @@ import moment from 'moment'
 
 import { useTheme } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
-import DaySunny from '../../Icons/DaySunny'
-import { IconComponent as Icon } from '../utils'
 
+import { IconComponent as Icon } from '../utils'
 import './CurrentWeather.css'
 
 const CurrentWeather = props => {
   const theme = useTheme()
-  const { weather } = props
+  const { weather, onOpen } = props
   const [values, setValues] = useState({
     city: ' ----- ',
     state: ' ----- ',
@@ -40,11 +39,9 @@ const CurrentWeather = props => {
     }
   }, [weather])
 
-  console.log({ weather })
-
   return (
     <div className="currentWeather">
-      <div className="cw-header">
+      <div className="cw-header" role="button" tabIndex={0} onClick={onOpen} onKeyPress={onOpen}>
         <Typography color="primary" variant="h4">
           {values.city}
           ,&nbsp;
@@ -97,7 +94,8 @@ CurrentWeather.propTypes = {
     weather: PropTypes.array,
     main: PropTypes.object,
     wind: PropTypes.object
-  }).isRequired
+  }).isRequired,
+  onOpen: PropTypes.func.isRequired
 }
 
 export default CurrentWeather

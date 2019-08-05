@@ -1,11 +1,11 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 import Cloud from '../Icons/Cloud'
 import Cloudy from '../Icons/Cloudy'
 import DayCloudy from '../Icons/DayCloudy'
 import DaySunny from '../Icons/DaySunny'
 import NightCloudy from '../Icons/NightCloudy'
-import NightClear from '../Icons/NightClear'
 import Showers from '../Icons/Showers'
 import Rain from '../Icons/Rain'
 import Thunderstorm from '../Icons/Thunderstorm'
@@ -27,4 +27,8 @@ export const IconComponent = props => {
   if (icon === '50d' || icon === '50n') return <Fog {...props} />
 
   return <Cloudy {...props} />
+}
+
+IconComponent.propTypes = {
+  icon: PropTypes.node.isRequired
 }

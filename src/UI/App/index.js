@@ -1,18 +1,21 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { Store } from '../../Store'
 
 import CurrentWeather from '../CurrentWeather'
+import { DialogComponent as Dialog } from '../Dialog'
 import WeatherChart from '../WeatherChart'
 import Forecast from '../Forecast'
 import './App.css'
 
 const App = () => {
-  const { state, dispatch } = React.useContext(Store)
+  const { state, dispatch } = useContext(Store)
+  const [open, setOpen] = useState(false)
+
   const weatherApiKey = 'bcce35b25122edecf0adb53cdda3f218'
   const zipApiKey = 'js-8VJ3dpo17MwCTKBwNR5T7H0Am37wT36CC9mKYxI2JT5AR9S4cxx2fph08ioe0CQ6'
 
   const fetchWeather = async zip => {
-    const zipUrl = `https://www.zipcodeapi.com/rest/${zipApiKey}/info.json/98007/degrees`
+    const zipUrl = `https://www.zipcodeapi.com/rest/${zipApiKey}/info.json/${zip}/degrees`
 
     const zipData = await fetch(zipUrl)
     const zipDataJSON = await zipData.json()
@@ -35,22 +38,19 @@ const App = () => {
     })
   }
 
-  // const fetchDataAction = async () => {
-  //   const data = await fetch('https://api.tvmaze.com/singlesearch/shows?q=rick-&-morty&embed=episodes');
-  //   const dataJSON = await data.json();
-  //   return dispatch({
-  //     type: 'FETCH_DATA',
-  //     payload: dataJSON._embedded.episodes
-  //   });
-  // };
-
   useEffect(() => {
-    Object.keys(state.weather).length === 0 && fetchWeather()
+    if (Object.keys(state.weather).length === 0) {
+      fetchWeather(state.currentZip)
+    }
   })
 
   return (
     <div className="App">
-      <CurrentWeather weather={state.weather} />
+      {open
+        ? <Dialog onClose={() => setOpen(false)} fetchWeather={zip => fetchWeather(zip)} />
+        : null
+      }
+      <CurrentWeather weather={state.weather} onOpen={() => setOpen(true)} />
       <WeatherChart weather={state.weather} />
       <Forecast weather={state.weather} />
     </div>

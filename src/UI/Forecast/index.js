@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
+import PropTypes from 'prop-types'
 import moment from 'moment'
 
 import { useTheme } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 
-import Cloudy from '../../Icons/Cloudy'
 import { IconComponent as Icon } from '../utils'
 
 import './Forecast.css'
@@ -96,6 +96,16 @@ const Forecast = props => {
       ))}
     </div>
   )
+}
+
+Forecast.propTypes = {
+  weather: PropTypes.shape({
+    main: PropTypes.shape({
+      temp: PropTypes.number
+    }),
+    weather: PropTypes.array,
+    list: PropTypes.array
+  }).isRequired
 }
 
 export default Forecast

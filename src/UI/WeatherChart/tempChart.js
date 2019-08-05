@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react'
 import moment from 'moment'
 
 import { useTheme } from '@material-ui/core/styles'
-
-import { AreaChart, LabelList, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
+import { AreaChart, LabelList, Area, XAxis, ResponsiveContainer } from 'recharts'
 import { Store } from '../../Store'
 
 const initialData = [
@@ -37,7 +36,7 @@ const initialData = [
   }
 ]
 
-const Example = () => {
+const Chart = () => {
   const theme = useTheme()
   const { primary, secondary } = theme.palette
   const { state } = React.useContext(Store)
@@ -51,7 +50,7 @@ const Example = () => {
 
       for (let i = 0; i < 10; i += 1) {
         weatherData.push({
-          name: moment(new Date(list[i].dt * 1000)).format('ddd h A'),
+          name: moment(new Date(list[i].dt * 1000)).format('h A'),
           temp: Math.round(list[i].main.temp)
         })
       }
@@ -75,7 +74,6 @@ const Example = () => {
           }}
         >
           <XAxis dataKey="name" stroke={secondary.main} padding={{ left: 10, right: 10 }} />
-          {/* <Tooltip content={<CustomTooltip />} /> */}
           <Area type="monotone" dataKey="temp" stroke={primary.main} fill={primary.main}>
             <LabelList dataKey="temp" position="top" fill={secondary.main} />
           </Area>
@@ -85,4 +83,4 @@ const Example = () => {
   )
 }
 
-export default Example
+export default Chart

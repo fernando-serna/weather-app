@@ -21,6 +21,8 @@
 
 .cw-header {
   grid-area: cw-header;
+  width: fit-content;
+  cursor: pointer;
 }
 
 .cw-header h4 {
