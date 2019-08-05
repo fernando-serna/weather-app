@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import moment from 'moment'
 
+import { useTheme } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
+
 import Cloudy from '../../Icons/Cloudy'
+import { IconComponent as Icon } from '../utils'
 
 import './Forecast.css'
 
 const Forecast = props => {
   const { weather } = props
+  const theme = useTheme()
   const [forecast, setForecast] = useState([])
 
   const formatDay = dt => moment(dt).format('dddd')
@@ -20,7 +24,8 @@ const Forecast = props => {
       week.push({
         name: moment(day).add(i, 'days').format('dddd'),
         high: Number.NEGATIVE_INFINITY,
-        low: Number.POSITIVE_INFINITY
+        low: Number.POSITIVE_INFINITY,
+        icon: ''
       })
     }
 
@@ -39,45 +44,25 @@ const Forecast = props => {
         const { temp } = reading.main
 
         if (moment(dayOfWeek).isSame(readingDate, 'date')) {
+          if (forecastDay.high < temp) {
+            forecastDay.icon = reading.weather[0].icon
+          }
+
           forecastDay.high = Math.max(forecastDay.high, temp)
           forecastDay.low = Math.min(forecastDay.low, temp)
         } else {
           dayOfWeek = readingDate
           forecastDay.high = temp
           forecastDay.low = temp
+          forecastDay.icon = reading.weather[0].icon
         }
 
-        console.log({ day: formatDay(readingDate), temp, main: reading.main })
         forecastWeek = [...forecastWeek.filter(x => x.name !== formatDay(readingDate)), forecastDay]
       })
 
       setForecast(forecastWeek)
     }
   }, [weather])
-
-  // Hard coded array for days of the week
-  // useEffect(() => {
-  //   const day = new Date(dt * 1000)
-  //   const forecast = {}
-
-  //   list.forEach(reading => {
-  //     const dayOfWeek = moment(day).format('dddd')
-
-  //     if (moment(day).isSame(moment(reading.dt * 1000), 'date')) {
-  //       forecast[dayOfWeek] = {}
-  //     }
-  //   })
-
-  //   for (let i = 1; i < 6; i += 1) {
-  //     days.push(
-  //       moment(day)
-  //         .add(i, 'days')
-  //         .format('dddd')
-  //     )
-  //   }
-
-  //   setWeek(days)
-  // }, [])
 
   return (
     <div className="forecast">
@@ -89,7 +74,7 @@ const Forecast = props => {
             </Typography>
           </div>
           <div className="forecast-icon">
-            <Cloudy fill="orange" height={64} width={64} />
+            <Icon icon={day.icon} fill={theme.palette.primary.main} height={64} width={64} />
           </div>
           <div className="forecast-temp">
             <Typography color="secondary" variant="body1">

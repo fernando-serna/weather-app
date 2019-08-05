@@ -19,7 +19,7 @@ const WeatherChart = () => {
 
   return (
     <div className="weatherChart">
-      <div className="wc-buttons">
+      {/* <div className="wc-buttons">
         <Button variant="outlined" color="primary" className={classes.button}>
           Temperature
         </Button>
@@ -29,7 +29,7 @@ const WeatherChart = () => {
         <Button variant="outlined" color="primary" className={classes.button}>
           Wind
         </Button>
-      </div>
+      </div> */}
       <Example />
     </div>
   )

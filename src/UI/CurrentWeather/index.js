@@ -2,12 +2,15 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 
+import { useTheme } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import DaySunny from '../../Icons/DaySunny'
+import { IconComponent as Icon } from '../utils'
 
 import './CurrentWeather.css'
 
 const CurrentWeather = props => {
+  const theme = useTheme()
   const { weather } = props
   const [values, setValues] = useState({
     city: ' ----- ',
@@ -17,11 +20,11 @@ const CurrentWeather = props => {
     temp: 0,
     pressure: 0,
     humidity: 0,
-    speed: 0
+    speed: 0,
+    icon: ''
   })
 
   useEffect(() => {
-    console.log('weather updated')
     if (Object.keys(weather).length) {
       setValues({
         city: weather.city,
@@ -31,7 +34,8 @@ const CurrentWeather = props => {
         temp: Math.round(weather.main.temp),
         pressure: weather.main.pressure,
         humidity: weather.main.humidity,
-        speed: weather.wind.speed
+        speed: weather.wind.speed,
+        icon: weather.weather[0].icon
       })
     }
   }, [weather])
@@ -54,12 +58,12 @@ const CurrentWeather = props => {
         </Typography>
       </div>
       <div className="cw-temp">
-        <DaySunny fill="orange" height={75} width={75} />
+        <Icon icon={values.icon} fill={theme.palette.primary.main} height={75} width={75} />
         <div style={{ display: 'flex' }}>
-          <Typography color="primary" variant="h3">
+          <Typography color="secondary" variant="h3">
             {values.temp}
           </Typography>
-          <Typography color="primary" variant="body1">
+          <Typography color="secondary" variant="body1">
             &#8457;
           </Typography>
         </div>

@@ -26,11 +26,39 @@
   text-align: right;
 }
 
-
-@media screen and (min-width: 600px) {
+@media screen and (min-width: 600px) and (max-height: 600px) {
   .forecast {
     display: flex;
     align-self: center;
+    justify-content: space-evenly;
+    border-top: 0;
+  }
+
+  .forecast-item {
+    display: flex;
+    flex-direction: column; 
+    border-bottom: 0;
+  }
+
+  .forecast-day {
+    width: 100%;
+    text-align: center; 
+  }
+  
+  .forecast-icon {
+    width: 100%;
+  }
+
+  .forecast-temp {
+    width: 100%;
+    text-align: center; 
+  }
+}
+
+@media screen and (min-width: 600px) and (min-height: 601px) {
+  .forecast {
+    display: flex;
+    align-self: flex-start;
     justify-content: space-evenly;
     border-top: 0;
   }

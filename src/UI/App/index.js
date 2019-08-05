@@ -19,8 +19,6 @@ const App = () => {
 
     const { lat, lng } = zipDataJSON
 
-    console.log({ lat, lng })
-
     const weatherUrl = `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&units=imperial&APPID=${weatherApiKey}`
     const forecastUrl = `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lng}&units=imperial&APPID=${weatherApiKey}`
 
@@ -50,14 +48,10 @@ const App = () => {
     Object.keys(state.weather).length === 0 && fetchWeather()
   })
 
-  useEffect(() => {
-    console.log({ state })
-  }, [state])
-
   return (
     <div className="App">
       <CurrentWeather weather={state.weather} />
-      <WeatherChart />
+      <WeatherChart weather={state.weather} />
       <Forecast weather={state.weather} />
     </div>
   )

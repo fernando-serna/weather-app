@@ -2,7 +2,7 @@
   grid-area: currentWeather;
   width: 100%;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 150px 1fr;
   grid-template-rows: 1fr 1fr;
   grid-column-gap: 10px;
   grid-row-gap: 10px;
@@ -39,7 +39,7 @@
 }
 
 .cw-temp h3 {
-  font-size: 2.5em;
+  font-size: 2em;
 }
 
 .cw-temp p {
