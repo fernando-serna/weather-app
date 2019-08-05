@@ -22,8 +22,8 @@ const App = () => {
 
     const { lat, lng } = zipDataJSON
 
-    const weatherUrl = `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&units=imperial&APPID=${weatherApiKey}`
-    const forecastUrl = `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lng}&units=imperial&APPID=${weatherApiKey}`
+    const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&units=imperial&APPID=${weatherApiKey}`
+    const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lng}&units=imperial&APPID=${weatherApiKey}`
 
 
     const weatherData = await fetch(weatherUrl)
