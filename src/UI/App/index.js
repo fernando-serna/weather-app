@@ -21,19 +21,25 @@ const App = () => {
     const { fields } = zipDataJSON.records[0]
     const { latitude, longitude } = fields
 
-    const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=imperial&APPID=${weatherApiKey}`
-    const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&units=imperial&APPID=${weatherApiKey}`
+    const forecastUrl = `https://api.weather.gov/points/${latitude},${longitude}/forecast`
+    const hourlyUrl = `https://api.weather.gov/points/${latitude},${longitude}/forecast/hourly`
 
-
-    const weatherData = await fetch(weatherUrl)
-    const weatherDataJSON = await weatherData.json()
 
     const forecastData = await fetch(forecastUrl)
     const forecastDataJSON = await forecastData.json()
+    const { periods: forecastPeriods } = forecastDataJSON.properties
+
+    const hourlyData = await fetch(hourlyUrl)
+    const hourlyDataJSON = await hourlyData.json()
+    const { periods: hourlyPeriods } = hourlyDataJSON.properties
+
+    const puppy = { forecastPeriods, hourlyPeriods, ...fields }
+
+    debugger
 
     return dispatch({
       type: 'FETCH_WEATHER',
-      payload: { ...weatherDataJSON, ...forecastDataJSON, ...fields }
+      payload: { forecastPeriods, hourlyPeriods, ...fields }
     })
   }
 
@@ -50,8 +56,8 @@ const App = () => {
         : null
       }
       <CurrentWeather weather={state.weather} onOpen={() => setOpen(true)} />
-      <WeatherChart weather={state.weather} />
-      <Forecast weather={state.weather} />
+      {/* <WeatherChart weather={state.weather} /> */}
+      {/* <Forecast weather={state.weather} /> */}
     </div>
   )
 }
