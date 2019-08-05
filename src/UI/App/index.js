@@ -12,18 +12,17 @@ const App = () => {
   const [open, setOpen] = useState(false)
 
   const weatherApiKey = 'bcce35b25122edecf0adb53cdda3f218'
-  const zipApiKey = 'js-8VJ3dpo17MwCTKBwNR5T7H0Am37wT36CC9mKYxI2JT5AR9S4cxx2fph08ioe0CQ6'
 
   const fetchWeather = async zip => {
-    const zipUrl = `https://www.zipcodeapi.com/rest/${zipApiKey}/info.json/${zip}/degrees`
+    const zipUrl = `https://public.opendatasoft.com/api/records/1.0/search/?dataset=us-zip-code-latitude-and-longitude&q=${zip}&facet=state&facet=timezone&facet=dst`
 
     const zipData = await fetch(zipUrl)
     const zipDataJSON = await zipData.json()
+    const { fields } = zipDataJSON.records[0]
+    const { latitude, longitude } = fields
 
-    const { lat, lng } = zipDataJSON
-
-    const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&units=imperial&APPID=${weatherApiKey}`
-    const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lng}&units=imperial&APPID=${weatherApiKey}`
+    const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=imperial&APPID=${weatherApiKey}`
+    const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&units=imperial&APPID=${weatherApiKey}`
 
 
     const weatherData = await fetch(weatherUrl)
@@ -34,7 +33,7 @@ const App = () => {
 
     return dispatch({
       type: 'FETCH_WEATHER',
-      payload: { ...weatherDataJSON, ...forecastDataJSON, ...zipDataJSON }
+      payload: { ...weatherDataJSON, ...forecastDataJSON, ...fields }
     })
   }
 
