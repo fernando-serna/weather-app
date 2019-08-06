@@ -23,7 +23,7 @@ const App = () => {
 
     const forecastUrl = `https://api.weather.gov/points/${latitude},${longitude}/forecast`
     const hourlyUrl = `https://api.weather.gov/points/${latitude},${longitude}/forecast/hourly`
-
+    const sunSetRiseUrl = `https://api.sunrise-sunset.org/json?lat=${latitude}&lng=${longitude}`
 
     const forecastData = await fetch(forecastUrl)
     const forecastDataJSON = await forecastData.json()
@@ -33,13 +33,15 @@ const App = () => {
     const hourlyDataJSON = await hourlyData.json()
     const { periods: hourlyPeriods } = hourlyDataJSON.properties
 
-    const puppy = { forecastPeriods, hourlyPeriods, ...fields }
+    const sunSetRiseData = await fetch(sunSetRiseUrl)
+    const sunSetRiseDataJSON = await sunSetRiseData.json()
+    const { results } = sunSetRiseDataJSON
 
-    debugger
+    const puppy = { forecastPeriods, hourlyPeriods, ...fields, ...results }
 
     return dispatch({
       type: 'FETCH_WEATHER',
-      payload: { forecastPeriods, hourlyPeriods, ...fields }
+      payload: { forecastPeriods, hourlyPeriods, ...fields, ...results }
     })
   }
 

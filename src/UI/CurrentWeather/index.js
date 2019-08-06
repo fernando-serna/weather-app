@@ -23,11 +23,15 @@ const CurrentWeather = props => {
     icon: '',
     shortForecast: ' ----- ',
     detailedForecast: ' ----- ',
+    sunrise: ' ----- ',
+    sunset: ' ----- ',
+    wind: ' ----- ',
   })
 
   useEffect(() => {
     if (Object.keys(weather).length) {
       const { forecastPeriods } = weather
+      const today = moment(new Date()).format('l')
 
       setValues({
         city: weather.city,
@@ -36,10 +40,10 @@ const CurrentWeather = props => {
         shortForecast: forecastPeriods[0].shortForecast,
         detailedForecast: forecastPeriods[0].detailedForecast,
         temp: Math.round(forecastPeriods[0].temperature),
-        // pressure: weather.main.pressure,
-        // humidity: weather.main.humidity,
-        // speed: forecastPeriods[0].windSpeed,
-        // icon: weather.weather[0].icon
+        sunset: moment(new Date(`${today} ${weather.sunset} UTC`)).format('LT'),
+        sunrise: moment(new Date(`${today} ${weather.sunrise} UTC`)).format('LT'),
+        wind: `${forecastPeriods[0].windSpeed} ${forecastPeriods[0].windDirection}`,
+        icon: forecastPeriods[0].icon
       })
     }
   }, [weather])
@@ -71,20 +75,17 @@ const CurrentWeather = props => {
         </div>
       </div>
       <div className="cw-env">
-        {/* <Typography color="secondary" variant="h6">
-          Pressure:&nbsp;
-          {values.pressure}
-          &nbsp;atm
+        <Typography color="secondary" variant="h6">
+          Sunrise:&nbsp;
+          {values.sunrise}
         </Typography>
         <Typography color="secondary" variant="h6">
-          Humidity:&nbsp;
-          {values.humidity}
-          &nbsp;%
-        </Typography> */}
+          Sunset:&nbsp;
+          {values.sunset}
+        </Typography>
         <Typography color="secondary" variant="h6">
-          {/* Wind:&nbsp; */}
-          {values.detailedForecast}
-          {/* &nbsp;mph */}
+          Wind:&nbsp;
+          {values.wind}
         </Typography>
       </div>
     </div>
