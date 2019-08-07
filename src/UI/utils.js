@@ -37,7 +37,7 @@ export const IconComponent = props => {
   }
 
   if (icon.includes('night')) {
-    if (icon.includes('few') || icon.icon('sct') || icon.includes('bkn') || icon.includes('ovc')) {
+    if (icon.includes('few') || icon.includes('sct') || icon.includes('bkn') || icon.includes('ovc')) {
       return <NightCloudy {...props} />
     }
     return <NightClear {...props} />
