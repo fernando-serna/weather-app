@@ -11,7 +11,7 @@ const muiTheme = createMuiTheme({
   overrides: {
     MuiPaper: {
       root: {
-        backgroundColor: blueGrey[800]
+        backgroundColor: blueGrey[700]
       }
     }
   }

@@ -28,7 +28,7 @@ const useStyles = makeStyles(theme => ({
   textField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
-    width: 200,
+    width: 200
   },
 }))
 
@@ -59,7 +59,11 @@ DialogTitle.defaultProps = {
 
 const DialogContent = props => {
   const styles = makeStyles(theme => ({
-    padding: theme.spacing(2)
+    root: {
+      padding: theme.spacing(2),
+      display: 'flex',
+      justifyContent: 'center'
+    }
   }))
   const classes = styles()
   const { children } = props
@@ -97,17 +101,19 @@ DialogActions.propTypes = {
 }
 
 export const DialogComponent = props => {
+  const classes = useStyles()
   const { state, dispatch } = useContext(Store)
   const { fetchWeather, onClose } = props
   const [zip, setZip] = useState(state.currentZip)
   const [error, setError] = useState(false)
 
+  /*
+    Check if valid zip, set store zip key and call fetchWeatherFunction again,
+    else show error
+  */
   const handleSubmit = () => {
     if (zip.toString().length === 5) {
-      dispatch({
-        type: 'SET_ZIP',
-        payload: zip
-      })
+      dispatch({ type: 'SET_ZIP', payload: zip })
       fetchWeather(zip)
       onClose()
     } else {
@@ -115,10 +121,9 @@ export const DialogComponent = props => {
     }
   }
 
+  /* Clear error whenever active */
   const onChange = e => {
-    if (error) {
-      setError(false)
-    }
+    if (error) setError(false)
     setZip(e.target.value)
   }
 
@@ -139,6 +144,7 @@ export const DialogComponent = props => {
           onChange={e => onChange(e)}
           type="number"
           margin="normal"
+          className={classes.textField}
         />
       </DialogContent>
       <DialogActions>

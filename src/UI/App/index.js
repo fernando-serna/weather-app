@@ -10,7 +10,13 @@ import './App.css'
 const App = () => {
   const { state, dispatch } = useContext(Store)
   const [open, setOpen] = useState(false)
+  const [width, setWidth] = useState(window.innerWidth)
+  const [height, setHeight] = useState(window.innerHeight)
 
+  /*
+    Function to fetch longitude and latitude from provided zip code and use
+    them in the api calls for weeather data.
+  */
   const fetchWeather = async zip => {
     const zipUrl = `https://public.opendatasoft.com/api/records/1.0/search/?dataset=us-zip-code-latitude-and-longitude&q=${zip}&facet=state&facet=timezone&facet=dst`
 
@@ -41,11 +47,22 @@ const App = () => {
     })
   }
 
+  /* Fetch weather on empty weather object */
   useEffect(() => {
     if (Object.keys(state.weather).length === 0) {
       fetchWeather(state.currentZip)
     }
   })
+
+  /* Add window resize listener to decide whether or not chart should be rendered */
+  useEffect(() => {
+    const handleResize = () => {
+      setWidth(window.innerWidth)
+      setHeight(window.innerHeight)
+    }
+    window.addEventListener('resize', handleResize)
+    return () => { window.removeEventListener('resize', handleResize) }
+  }, [])
 
   return (
     <div className="App">
@@ -54,7 +71,7 @@ const App = () => {
         : null
       }
       <CurrentWeather weather={state.weather} onOpen={() => setOpen(true)} />
-      <WeatherChart weather={state.weather} />
+      {width > 600 && height > 600 ? <WeatherChart weather={state.weather} /> : null}
       <Forecast weather={state.weather} />
     </div>
   )

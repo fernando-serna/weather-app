@@ -14,12 +14,15 @@ const Forecast = props => {
   const theme = useTheme()
   const [forecast, setForecast] = useState([])
 
+  /* When component mounts, set initial forecast data */
   useEffect(() => {
     const day = new Date()
     const week = []
 
     week.push({
-      name: 'Today',
+      id: 0,
+      name: moment(day).format('L'),
+      title: 'Today',
       high: Number.NEGATIVE_INFINITY,
       low: Number.POSITIVE_INFINITY,
       icon: ''
@@ -27,7 +30,9 @@ const Forecast = props => {
 
     for (let i = 1; i < 7; i += 1) {
       week.push({
-        name: moment(day).add(i, 'days').format('dddd'),
+        id: 1,
+        name: moment(day).add(i, 'days').format('L'),
+        title: moment(day).add(i, 'days').format('dddd'),
         high: Number.NEGATIVE_INFINITY,
         low: Number.POSITIVE_INFINITY,
         icon: ''
@@ -37,16 +42,30 @@ const Forecast = props => {
     setForecast(week)
   }, [])
 
+  /*
+    On new weather data, for each day in the forecasted week, find the
+    corresponding days from the new weather data and store high and low
+    temperatures and icons for those days.
+  */
   useEffect(() => {
     if (Object.keys(weather).length) {
       const { forecastPeriods } = weather
       const forecastWeek = [...forecast]
 
-      for (let i = 0; i < forecastWeek.length; i += 1) {
-        forecastWeek[i].high = forecastPeriods[i * 2].temperature
-        forecastWeek[i].low = forecastPeriods[i * 2 + 1].temperature
-        forecastWeek[i].icon = forecastPeriods[i * 2].icon
-      }
+      forecastWeek.forEach((day, index) => {
+        const date = new Date(day.name)
+        const period = forecastPeriods.filter(x => moment(x.startTime).isSame(date, 'day'))
+
+        const high = period.find(key => key.isDaytime)
+        const low = period.find(key => !key.isDaytime)
+
+        if (low) {
+          forecastWeek[index] = { ...forecastWeek[index], low: low.temperature, icon: low.icon }
+        }
+        if (high) {
+          forecastWeek[index] = { ...forecastWeek[index], high: high.temperature, icon: high.icon }
+        }
+      })
 
       setForecast(forecastWeek)
     }
@@ -55,10 +74,10 @@ const Forecast = props => {
   return (
     <div className="forecast">
       {forecast.map(day => (
-        <div key={day.name} className="forecast-item">
+        <div key={day.title} className="forecast-item">
           <div className="forecast-day">
             <Typography color="secondary" variant="body1">
-              {day.name}
+              {day.title}
             </Typography>
           </div>
           <div className="forecast-icon">
@@ -66,11 +85,9 @@ const Forecast = props => {
           </div>
           <div className="forecast-temp">
             <Typography color="secondary" variant="body1">
-              {Math.round(day.high)}
-              &deg;
-              |&nbsp;
-              {Math.round(day.low)}
-              &deg;
+              {day.high > Number.NEGATIVE_INFINITY ? `${day.high}\u00b0` : null}
+              &nbsp;|&nbsp;
+              {day.low < Number.POSITIVE_INFINITY ? `${day.low}\u00b0` : null}
             </Typography>
           </div>
         </div>

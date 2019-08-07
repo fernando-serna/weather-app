@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useCallback } from 'react'
 import moment from 'moment'
 
 import { useTheme } from '@material-ui/core/styles'
@@ -43,8 +43,12 @@ const Chart = () => {
   const { weather } = state
   const [data, setData] = useState([...initialData])
 
-  useEffect(() => {
-    if (Object.keys(weather).length) {
+  /*
+    Set chart data after dom renders and weather data is available. Since we
+    receive hourly data, loop through the first 30 entries using 3 hour intervals
+  */
+  const chartRef = useCallback(node => {
+    if (node !== null && Object.keys(weather).length) {
       const { hourlyPeriods } = weather
       const weatherData = []
 
@@ -60,14 +64,14 @@ const Chart = () => {
   }, [weather])
 
   return (
-    <div className="wc-chart" style={{ width: '100%', height: 200 }}>
+    <div ref={chartRef} className="wc-chart" style={{ width: '100%', height: 200 }}>
       <ResponsiveContainer width="99%">
         <AreaChart
           width={500}
           height={300}
           data={data}
           margin={{
-            top: 10,
+            top: 20,
             right: 30,
             left: 30,
             bottom: 0

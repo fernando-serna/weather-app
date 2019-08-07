@@ -23,6 +23,7 @@ const CurrentWeather = props => {
     wind: ' ----- '
   })
 
+  /* Update data on new weather props */
   useEffect(() => {
     if (Object.keys(weather).length) {
       const { forecastPeriods } = weather
