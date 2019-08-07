@@ -103,7 +103,7 @@ DialogActions.propTypes = {
 export const DialogComponent = props => {
   const classes = useStyles()
   const { state, dispatch } = useContext(Store)
-  const { fetchWeather, onClose } = props
+  const { onSubmit, onClose } = props
   const [zip, setZip] = useState(state.currentZip)
   const [error, setError] = useState(false)
 
@@ -114,8 +114,7 @@ export const DialogComponent = props => {
   const handleSubmit = () => {
     if (zip.toString().length === 5) {
       dispatch({ type: 'SET_ZIP', payload: zip })
-      fetchWeather(zip)
-      onClose()
+      onSubmit(zip)
     } else {
       setError(true)
     }
@@ -157,6 +156,6 @@ export const DialogComponent = props => {
 }
 
 DialogComponent.propTypes = {
-  fetchWeather: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired
 }

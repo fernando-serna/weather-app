@@ -2,9 +2,10 @@ import React, { useState, useEffect, useContext } from 'react'
 import { Store } from '../../Store'
 
 import CurrentWeather from '../CurrentWeather'
-import { DialogComponent as Dialog } from '../Dialog'
 import WeatherChart from '../WeatherChart'
 import Forecast from '../Forecast'
+import { DialogComponent as Dialog } from '../Dialog'
+import { CircularProgressComponent as CircularProgress } from '../utils'
 import './App.css'
 
 const App = () => {
@@ -12,6 +13,7 @@ const App = () => {
   const [open, setOpen] = useState(false)
   const [width, setWidth] = useState(window.innerWidth)
   const [height, setHeight] = useState(window.innerHeight)
+  const [loading, setLoading] = useState(false)
 
   /*
     Function to fetch longitude and latitude from provided zip code and use
@@ -47,6 +49,17 @@ const App = () => {
     })
   }
 
+  /*
+    When user submits a new zipcode, close dialog, open loading component,
+    await the retreival of new data and then close the loading component
+  */
+  const handleSubmit = async zip => {
+    setOpen(false)
+    setLoading(true)
+    await fetchWeather(zip)
+    setLoading(false)
+  }
+
   /* Fetch weather on empty weather object */
   useEffect(() => {
     if (Object.keys(state.weather).length === 0) {
@@ -66,10 +79,8 @@ const App = () => {
 
   return (
     <div className="App">
-      {open
-        ? <Dialog onClose={() => setOpen(false)} fetchWeather={zip => fetchWeather(zip)} />
-        : null
-      }
+      {open ? <Dialog onClose={() => setOpen(false)} onSubmit={zip => handleSubmit(zip)} /> : null}
+      {loading ? <CircularProgress /> : null}
       <CurrentWeather weather={state.weather} onOpen={() => setOpen(true)} />
       {width > 600 && height > 600 ? <WeatherChart weather={state.weather} /> : null}
       <Forecast weather={state.weather} />

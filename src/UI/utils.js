@@ -1,6 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import { makeStyles } from '@material-ui/core/styles'
+import LinearProgress from '@material-ui/core/LinearProgress'
+
 import Alien from '../Icons/Alien'
 import CloudyGusts from '../Icons/CloudyGusts'
 import DayCloudy from '../Icons/DayCloudy'
@@ -15,6 +18,34 @@ import Showers from '../Icons/Showers'
 import Smoke from '../Icons/Smoke'
 import Snow from '../Icons/Snow'
 import Thunderstorm from '../Icons/Thunderstorm'
+
+const useStyles = makeStyles(theme => ({
+  progress: {
+    margin: theme.spacing(2)
+  },
+  root: {
+    flexGrow: 1
+  }
+}))
+
+export const CircularProgressComponent = () => {
+  const classes = useStyles()
+
+  return (
+    <div
+      style={{
+        display: 'flex',
+        position: 'absolute',
+        height: '100vh',
+        width: '100vw',
+        backgroundColor: 'black',
+        opacity: 0.5
+      }}
+    >
+      <LinearProgress className={classes.root} />
+    </div>
+  )
+}
 
 export const IconComponent = props => {
   const { icon } = props
