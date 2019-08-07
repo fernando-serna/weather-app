@@ -45,13 +45,13 @@ const Chart = () => {
 
   useEffect(() => {
     if (Object.keys(weather).length) {
-      const { list } = weather
+      const { hourlyPeriods } = weather
       const weatherData = []
 
-      for (let i = 0; i < 10; i += 1) {
+      for (let i = 0; i < 30; i += 3) {
         weatherData.push({
-          name: moment(new Date(list[i].dt * 1000)).format('h A'),
-          temp: Math.round(list[i].main.temp)
+          name: moment(new Date(hourlyPeriods[i].startTime)).format('h A'),
+          temp: Math.round(hourlyPeriods[i].temperature)
         })
       }
 

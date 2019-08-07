@@ -11,8 +11,6 @@ const App = () => {
   const { state, dispatch } = useContext(Store)
   const [open, setOpen] = useState(false)
 
-  const weatherApiKey = 'bcce35b25122edecf0adb53cdda3f218'
-
   const fetchWeather = async zip => {
     const zipUrl = `https://public.opendatasoft.com/api/records/1.0/search/?dataset=us-zip-code-latitude-and-longitude&q=${zip}&facet=state&facet=timezone&facet=dst`
 
@@ -21,19 +19,25 @@ const App = () => {
     const { fields } = zipDataJSON.records[0]
     const { latitude, longitude } = fields
 
-    const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=imperial&APPID=${weatherApiKey}`
-    const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&units=imperial&APPID=${weatherApiKey}`
-
-
-    const weatherData = await fetch(weatherUrl)
-    const weatherDataJSON = await weatherData.json()
+    const forecastUrl = `https://api.weather.gov/points/${latitude},${longitude}/forecast`
+    const hourlyUrl = `https://api.weather.gov/points/${latitude},${longitude}/forecast/hourly`
+    const sunSetRiseUrl = `https://api.sunrise-sunset.org/json?lat=${latitude}&lng=${longitude}`
 
     const forecastData = await fetch(forecastUrl)
     const forecastDataJSON = await forecastData.json()
+    const { periods: forecastPeriods } = forecastDataJSON.properties
+
+    const hourlyData = await fetch(hourlyUrl)
+    const hourlyDataJSON = await hourlyData.json()
+    const { periods: hourlyPeriods } = hourlyDataJSON.properties
+
+    const sunSetRiseData = await fetch(sunSetRiseUrl)
+    const sunSetRiseDataJSON = await sunSetRiseData.json()
+    const { results } = sunSetRiseDataJSON
 
     return dispatch({
       type: 'FETCH_WEATHER',
-      payload: { ...weatherDataJSON, ...forecastDataJSON, ...fields }
+      payload: { forecastPeriods, hourlyPeriods, ...fields, ...results }
     })
   }
 

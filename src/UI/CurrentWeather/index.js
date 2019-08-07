@@ -15,26 +15,29 @@ const CurrentWeather = props => {
     city: ' ----- ',
     state: ' ----- ',
     date: moment(new Date()).format('dddd h:mm A'),
-    description: ' ----- ',
     temp: 0,
-    pressure: 0,
-    humidity: 0,
-    speed: 0,
-    icon: ''
+    icon: '',
+    shortForecast: ' ----- ',
+    sunrise: ' ----- ',
+    sunset: ' ----- ',
+    wind: ' ----- '
   })
 
   useEffect(() => {
     if (Object.keys(weather).length) {
+      const { forecastPeriods } = weather
+      const today = moment(new Date()).format('l')
+
       setValues({
         city: weather.city,
         state: weather.state,
-        date: moment(new Date(weather.dt * 1000)).format('dddd h:mm A'),
-        description: weather.weather[0].description,
-        temp: Math.round(weather.main.temp),
-        pressure: weather.main.pressure,
-        humidity: weather.main.humidity,
-        speed: weather.wind.speed,
-        icon: weather.weather[0].icon
+        date: moment(forecastPeriods[0].startTime).format('dddd h:mm A'),
+        shortForecast: forecastPeriods[0].shortForecast,
+        temp: Math.round(forecastPeriods[0].temperature),
+        sunset: moment(new Date(`${today} ${weather.sunset} UTC`)).format('LT'),
+        sunrise: moment(new Date(`${today} ${weather.sunrise} UTC`)).format('LT'),
+        wind: `${forecastPeriods[0].windSpeed} ${forecastPeriods[0].windDirection}`,
+        icon: forecastPeriods[0].icon
       })
     }
   }, [weather])
@@ -51,7 +54,7 @@ const CurrentWeather = props => {
           {values.date}
         </Typography>
         <Typography color="secondary" variant="h6" style={{ textTransform: 'capitalize' }}>
-          {values.description}
+          {values.shortForecast}
         </Typography>
       </div>
       <div className="cw-temp">
@@ -66,21 +69,30 @@ const CurrentWeather = props => {
         </div>
       </div>
       <div className="cw-env">
-        <Typography color="secondary" variant="h6">
-          Pressure:&nbsp;
-          {values.pressure}
-          &nbsp;atm
-        </Typography>
-        <Typography color="secondary" variant="h6">
-          Humidity:&nbsp;
-          {values.humidity}
-          &nbsp;%
-        </Typography>
-        <Typography color="secondary" variant="h6">
-          Wind:&nbsp;
-          {values.speed}
-          &nbsp;mph
-        </Typography>
+        <div className="cw-env-item">
+          <Typography color="secondary" variant="h6">
+            Wind:&nbsp;
+          </Typography>
+          <Typography color="secondary" variant="h6">
+            {values.wind}
+          </Typography>
+        </div>
+        <div className="cw-env-item">
+          <Typography color="secondary" variant="h6">
+            Sunrise:&nbsp;
+          </Typography>
+          <Typography color="secondary" variant="h6">
+            {values.sunrise}
+          </Typography>
+        </div>
+        <div className="cw-env-item">
+          <Typography color="secondary" variant="h6">
+            Sunset:&nbsp;
+          </Typography>
+          <Typography color="secondary" variant="h6">
+            {values.sunset}
+          </Typography>
+        </div>
       </div>
     </div>
   )
@@ -90,10 +102,9 @@ CurrentWeather.propTypes = {
   weather: PropTypes.shape({
     city: PropTypes.string,
     state: PropTypes.string,
-    dt: PropTypes.number,
-    weather: PropTypes.array,
-    main: PropTypes.object,
-    wind: PropTypes.object
+    sunrise: PropTypes.string,
+    sunset: PropTypes.string,
+    forecastPeriods: PropTypes.array
   }).isRequired,
   onOpen: PropTypes.func.isRequired
 }
