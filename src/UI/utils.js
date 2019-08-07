@@ -2,8 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import Alien from '../Icons/Alien'
-import Cloud from '../Icons/Cloud'
-import Cloudy from '../Icons/Cloudy'
 import CloudyGusts from '../Icons/CloudyGusts'
 import DayCloudy from '../Icons/DayCloudy'
 import DaySunny from '../Icons/DaySunny'
@@ -32,17 +30,17 @@ export const IconComponent = props => {
   if (icon.includes('rain')) return <Rain {...props} />
 
   if (icon.includes('day')) {
-    if (icon.includes('skc')) return <DaySunny {...props} />
-    if (icon.includes('few') || icon.icon('sct') || icon.includes('bkn') || icon.includes('ovc')) {
+    if (icon.includes('few') || icon.includes('sct') || icon.includes('bkn') || icon.includes('ovc')) {
       return <DayCloudy {...props} />
     }
+    return <DaySunny {...props} />
   }
 
   if (icon.includes('night')) {
-    if (icon.includes('skc')) return <NightClear {...props} />
     if (icon.includes('few') || icon.icon('sct') || icon.includes('bkn') || icon.includes('ovc')) {
       return <NightCloudy {...props} />
     }
+    return <NightClear {...props} />
   }
 
   return <Alien {...props} />

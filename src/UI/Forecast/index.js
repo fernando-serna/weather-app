@@ -14,13 +14,18 @@ const Forecast = props => {
   const theme = useTheme()
   const [forecast, setForecast] = useState([])
 
-  const formatDay = dt => moment(dt).format('dddd')
-
   useEffect(() => {
     const day = new Date()
     const week = []
 
-    for (let i = 1; i < 6; i += 1) {
+    week.push({
+      name: 'Today',
+      high: Number.NEGATIVE_INFINITY,
+      low: Number.POSITIVE_INFINITY,
+      icon: ''
+    })
+
+    for (let i = 1; i < 7; i += 1) {
       week.push({
         name: moment(day).add(i, 'days').format('dddd'),
         high: Number.NEGATIVE_INFINITY,
@@ -34,38 +39,14 @@ const Forecast = props => {
 
   useEffect(() => {
     if (Object.keys(weather).length) {
-      const { dt, list } = weather
-      let forecastWeek = [...forecast]
-      let dayOfWeek = new Date(dt * 1000)
+      const { forecastPeriods } = weather
+      const forecastWeek = [...forecast]
 
-      forecastWeek.unshift({
-        name: formatDay(dayOfWeek),
-        high: weather.main.temp,
-        low: weather.main.temp,
-        icon: weather.weather[0].icon
-      })
-
-      list.forEach(reading => {
-        const readingDate = new Date(reading.dt * 1000)
-        const forecastDay = { ...forecastWeek.find(x => x.name === formatDay(readingDate)) }
-        const { temp } = reading.main
-
-        if (moment(dayOfWeek).isSame(readingDate, 'date')) {
-          if (forecastDay.high < temp) {
-            forecastDay.icon = reading.weather[0].icon
-          }
-
-          forecastDay.high = Math.max(forecastDay.high, temp)
-          forecastDay.low = Math.min(forecastDay.low, temp)
-        } else {
-          dayOfWeek = readingDate
-          forecastDay.high = temp
-          forecastDay.low = temp
-          forecastDay.icon = reading.weather[0].icon
-        }
-
-        forecastWeek = [...forecastWeek.filter(x => x.name !== formatDay(readingDate)), forecastDay]
-      })
+      for (let i = 0; i < forecastWeek.length; i += 1) {
+        forecastWeek[i].high = forecastPeriods[i * 2].temperature
+        forecastWeek[i].low = forecastPeriods[i * 2 + 1].temperature
+        forecastWeek[i].icon = forecastPeriods[i * 2].icon
+      }
 
       setForecast(forecastWeek)
     }
@@ -100,11 +81,7 @@ const Forecast = props => {
 
 Forecast.propTypes = {
   weather: PropTypes.shape({
-    main: PropTypes.shape({
-      temp: PropTypes.number
-    }),
-    weather: PropTypes.array,
-    list: PropTypes.array
+    forecastPeriods: PropTypes.array
   }).isRequired
 }
 
