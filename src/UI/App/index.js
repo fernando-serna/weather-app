@@ -85,7 +85,7 @@ const App = () => {
 
   const err = e => {
     setLoading(false)
-    alert('You must enable location services to get current location')
+    alert('You must enable location services to get current location.')
   }
 
   const handleLocation = () => {

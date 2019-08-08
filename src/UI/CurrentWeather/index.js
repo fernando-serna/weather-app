@@ -45,7 +45,7 @@ const CurrentWeather = props => {
 
   return (
     <div className="currentWeather">
-      <div className="cw-header" role="button" tabIndex={0} onClick={onOpen} onKeyPress={onOpen}>
+      <div className="cw-header" role="button" tabIndex={-1} onClick={onOpen} onKeyPress={onOpen}>
         <Typography color="primary" variant="h4">
           {values.city}
           ,&nbsp;
