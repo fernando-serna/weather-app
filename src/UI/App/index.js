@@ -70,11 +70,11 @@ const App = () => {
 
   const succ = async s => {
     const { longitude, latitude } = s.coords
-    const locationUrl = `https://data.opendatasoft.com/api/records/1.0/search/?dataset=us-zip-code-latitude-and-longitude%40public&facet=dst&facet=state&facet=timezone&geofilter.distance=${latitude},${longitude},1000`
+    const locationUrl = `https://data.opendatasoft.com/api/records/1.0/search/?dataset=us-zip-code-latitude-and-longitude%40public&facet=dst&facet=state&facet=timezone&geofilter.distance=${latitude},${longitude},5000`
 
     const locationData = await fetch(locationUrl)
     const locationDataJSON = await locationData.json()
-    // debugger
+
     const { fields } = locationDataJSON.records[0]
 
     window.localStorage.setItem('location', JSON.stringify({ ...fields }))
