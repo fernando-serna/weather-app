@@ -20,6 +20,7 @@ const App = () => {
     them in the api calls for weeather data.
   */
   const fetchWeather = async zip => {
+    window.localStorage.setItem('zip', JSON.stringify(zip))
     const zipUrl = `https://public.opendatasoft.com/api/records/1.0/search/?dataset=us-zip-code-latitude-and-longitude&q=${zip}&facet=state&facet=timezone&facet=dst`
 
     const zipData = await fetch(zipUrl)
@@ -63,7 +64,10 @@ const App = () => {
   /* Fetch weather on empty weather object */
   useEffect(() => {
     if (Object.keys(state.weather).length === 0) {
-      fetchWeather(state.currentZip)
+      const zip = window.localStorage.getItem('zip')
+
+      if (zip) fetchWeather(JSON.parse(zip))
+      else fetchWeather(state.currentZip)
     }
   })
 
