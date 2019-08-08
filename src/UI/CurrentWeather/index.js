@@ -26,19 +26,19 @@ const CurrentWeather = props => {
   /* Update data on new weather props */
   useEffect(() => {
     if (Object.keys(weather).length) {
-      const { forecastPeriods } = weather
+      const { hourlyPeriods } = weather
       const today = moment(new Date()).format('l')
 
       setValues({
         city: weather.city,
         state: weather.state,
-        date: moment(forecastPeriods[0].startTime).format('dddd h:mm A'),
-        shortForecast: forecastPeriods[0].shortForecast,
-        temp: Math.round(forecastPeriods[0].temperature),
+        date: moment(new Date()).format('dddd h:mm A'),
+        shortForecast: hourlyPeriods[0].shortForecast,
+        temp: Math.round(hourlyPeriods[0].temperature),
         sunset: moment(new Date(`${today} ${weather.sunset} UTC`)).format('LT'),
         sunrise: moment(new Date(`${today} ${weather.sunrise} UTC`)).format('LT'),
-        wind: `${forecastPeriods[0].windSpeed} ${forecastPeriods[0].windDirection}`,
-        icon: forecastPeriods[0].icon
+        wind: `${hourlyPeriods[0].windSpeed} ${hourlyPeriods[0].windDirection}`,
+        icon: hourlyPeriods[0].icon
       })
     }
   }, [weather])
@@ -105,7 +105,7 @@ CurrentWeather.propTypes = {
     state: PropTypes.string,
     sunrise: PropTypes.string,
     sunset: PropTypes.string,
-    forecastPeriods: PropTypes.array
+    hourlyPeriods: PropTypes.array
   }).isRequired,
   onOpen: PropTypes.func.isRequired
 }
