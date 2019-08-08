@@ -79,6 +79,8 @@ const App = () => {
 
     window.localStorage.setItem('location', JSON.stringify({ ...fields }))
 
+    dispatch({ type: 'SET_ZIP', payload: Number(fields.zip) })
+
     await fetchWeather()
     setLoading(false)
   }
