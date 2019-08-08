@@ -19,14 +19,9 @@ const App = () => {
     Function to fetch longitude and latitude from provided zip code and use
     them in the api calls for weeather data.
   */
-  const fetchWeather = async zip => {
-    window.localStorage.setItem('zip', JSON.stringify(zip))
-    const zipUrl = `https://public.opendatasoft.com/api/records/1.0/search/?dataset=us-zip-code-latitude-and-longitude&q=${zip}&facet=state&facet=timezone&facet=dst`
-
-    const zipData = await fetch(zipUrl)
-    const zipDataJSON = await zipData.json()
-    const { fields } = zipDataJSON.records[0]
-    const { latitude, longitude } = fields
+  const fetchWeather = async () => {
+    const fields = JSON.parse(window.localStorage.getItem('location'))
+    const { longitude, latitude } = fields
 
     const forecastUrl = `https://api.weather.gov/points/${latitude},${longitude}/forecast`
     const hourlyUrl = `https://api.weather.gov/points/${latitude},${longitude}/forecast/hourly`
@@ -50,6 +45,18 @@ const App = () => {
     })
   }
 
+  const getLocation = async zip => {
+    const zipUrl = `https://public.opendatasoft.com/api/records/1.0/search/?dataset=us-zip-code-latitude-and-longitude&q=${zip}&facet=state&facet=timezone&facet=dst`
+
+    const zipData = await fetch(zipUrl)
+    const zipDataJSON = await zipData.json()
+    const { fields } = zipDataJSON.records[0]
+
+    window.localStorage.setItem('location', JSON.stringify({ ...fields }))
+
+    await fetchWeather()
+  }
+
   /*
     When user submits a new zipcode, close dialog, open loading component,
     await the retreival of new data and then close the loading component
@@ -57,17 +64,40 @@ const App = () => {
   const handleSubmit = async zip => {
     setOpen(false)
     setLoading(true)
-    await fetchWeather(zip)
+    await getLocation(zip)
     setLoading(false)
+  }
+
+  const succ = async s => {
+    const { longitude, latitude } = s.coords
+    const locationUrl = `https://data.opendatasoft.com/api/records/1.0/search/?dataset=us-zip-code-latitude-and-longitude%40public&facet=dst&facet=state&facet=timezone&geofilter.distance=${latitude},${longitude},1000`
+
+    const locationData = await fetch(locationUrl)
+    const locationDataJSON = await locationData.json()
+    // debugger
+    const { fields } = locationDataJSON.records[0]
+
+    window.localStorage.setItem('location', JSON.stringify({ ...fields }))
+
+    await fetchWeather()
+    setLoading(false)
+  }
+
+  const err = e => {
+    console.log({ e })
+  }
+
+  const handleLocation = () => {
+    setOpen(false)
+    setLoading(true)
+    navigator.geolocation.getCurrentPosition(succ, err)
   }
 
   /* Fetch weather on empty weather object */
   useEffect(() => {
     if (Object.keys(state.weather).length === 0) {
-      const zip = window.localStorage.getItem('zip')
-
-      if (zip) fetchWeather(JSON.parse(zip))
-      else fetchWeather(state.currentZip)
+      if (window.localStorage.getItem('location')) fetchWeather()
+      else getLocation(state.currentZip)
     }
   })
 
@@ -83,7 +113,13 @@ const App = () => {
 
   return (
     <div className="App">
-      {open ? <Dialog onClose={() => setOpen(false)} onSubmit={zip => handleSubmit(zip)} /> : null}
+      {open ? (
+        <Dialog
+          onClose={() => setOpen(false)}
+          onSubmit={zip => handleSubmit(zip)}
+          handleLocation={() => handleLocation()}
+        />
+      ) : null}
       {loading ? <CircularProgress /> : null}
       <CurrentWeather weather={state.weather} onOpen={() => setOpen(true)} />
       {width > 600 && height > 600 ? <WeatherChart weather={state.weather} /> : null}

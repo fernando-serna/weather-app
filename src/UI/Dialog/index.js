@@ -13,6 +13,7 @@ import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 
 import { Store } from '../../Store'
+import './Dialog.css'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -30,6 +31,9 @@ const useStyles = makeStyles(theme => ({
     marginRight: theme.spacing(1),
     width: 200
   },
+  button: {
+    margin: theme.spacing(1),
+  }
 }))
 
 const DialogTitle = props => {
@@ -62,7 +66,9 @@ const DialogContent = props => {
     root: {
       padding: theme.spacing(2),
       display: 'flex',
-      justifyContent: 'center'
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center'
     }
   }))
   const classes = styles()
@@ -103,7 +109,7 @@ DialogActions.propTypes = {
 export const DialogComponent = props => {
   const classes = useStyles()
   const { state, dispatch } = useContext(Store)
-  const { onSubmit, onClose } = props
+  const { onSubmit, onClose, handleLocation } = props
   const [zip, setZip] = useState(state.currentZip)
   const [error, setError] = useState(false)
 
@@ -132,22 +138,33 @@ export const DialogComponent = props => {
         Enter Zip Code
       </DialogTitle>
       <DialogContent dividers>
-        <TextField
-          autoFocus
-          fullWidth
-          error={error}
-          helperText={error ? 'Please enter a valid zip code' : null}
-          id="zip-field"
-          label="Zip Code"
-          value={zip}
-          onChange={e => onChange(e)}
-          type="number"
-          margin="normal"
-          className={classes.textField}
-        />
+        <div className="dialog-content">
+          <Button
+            className={classes.button}
+            variant="outlined"
+            color="primary"
+            onClick={() => handleLocation()}
+          >
+            Get Location
+          </Button>
+          <p>or</p>
+          <TextField
+            autoFocus
+            fullWidth
+            error={error}
+            helperText={error ? 'Please enter a valid zip code' : null}
+            id="zip-field"
+            label="Zip Code"
+            value={zip}
+            onChange={e => onChange(e)}
+            type="number"
+            margin="normal"
+            className={classes.textField}
+          />
+        </div>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleSubmit} color="primary" variant="outlined">
+        <Button onClick={handleSubmit} color="secondary" variant="outlined">
           Submit
         </Button>
       </DialogActions>
