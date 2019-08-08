@@ -149,7 +149,6 @@ export const DialogComponent = props => {
           </Button>
           <p>or</p>
           <TextField
-            autoFocus
             fullWidth
             error={error}
             helperText={error ? 'Please enter a valid zip code' : null}
