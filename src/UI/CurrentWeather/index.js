@@ -20,25 +20,27 @@ const CurrentWeather = props => {
     shortForecast: ' ----- ',
     sunrise: ' ----- ',
     sunset: ' ----- ',
-    wind: ' ----- '
+    wind: ' ----- ',
+    humidity: ' ----- '
   })
 
   /* Update data on new weather props */
   useEffect(() => {
+    console.log({ weather })
     if (Object.keys(weather).length) {
-      const { hourlyPeriods } = weather
-      const today = moment(new Date()).format('l')
+      const { currently, daily } = weather
 
       setValues({
         city: weather.city,
         state: weather.state,
-        date: moment(new Date()).format('dddd h:mm A'),
-        shortForecast: hourlyPeriods[0].shortForecast,
-        temp: Math.round(hourlyPeriods[0].temperature),
-        sunset: moment(new Date(`${today} ${weather.sunset} UTC`)).format('LT'),
-        sunrise: moment(new Date(`${today} ${weather.sunrise} UTC`)).format('LT'),
-        wind: `${hourlyPeriods[0].windSpeed} ${hourlyPeriods[0].windDirection}`,
-        icon: hourlyPeriods[0].icon
+        date: moment(new Date(currently.time * 1000)).format('dddd h:mm A'),
+        shortForecast: currently.summary,
+        temp: Math.round(currently.temperature),
+        sunset: moment(new Date(daily.data[0].sunsetTime * 1000)).format('LT'),
+        sunrise: moment(new Date(daily.data[0].sunriseTime * 1000)).format('LT'),
+        wind: currently.windSpeed,
+        humidity: currently.humidity,
+        icon: currently.icon
       })
     }
   }, [weather])
@@ -72,10 +74,20 @@ const CurrentWeather = props => {
       <div className="cw-env">
         <div className="cw-env-item">
           <Typography color="secondary" variant="h6">
+            Humidity:&nbsp;
+          </Typography>
+          <Typography color="secondary" variant="h6">
+            {values.humidity}
+            %
+          </Typography>
+        </div>
+        <div className="cw-env-item">
+          <Typography color="secondary" variant="h6">
             Wind:&nbsp;
           </Typography>
           <Typography color="secondary" variant="h6">
             {values.wind}
+            &nbsp;mph
           </Typography>
         </div>
         <div className="cw-env-item">

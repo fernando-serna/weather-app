@@ -1,14 +1,28 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { Store } from '../../Store'
 
+
+import { makeStyles } from '@material-ui/core/styles'
+import Card from '@material-ui/core/Card'
+import CardActions from '@material-ui/core/CardActions'
+import CardContent from '@material-ui/core/CardContent'
+
+import { Store } from '../../Store'
 import CurrentWeather from '../CurrentWeather'
+import WeatherCards from '../WeatherCards'
 import WeatherChart from '../WeatherChart'
 import Forecast from '../Forecast'
 import { DialogComponent as Dialog } from '../Dialog'
 import { CircularProgressComponent as CircularProgress } from '../utils'
 import './App.css'
 
+const useStyles = makeStyles({
+  card: {
+    minWidth: 275
+  },
+})
+
 const App = () => {
+  const classes = useStyles()
   const { state, dispatch } = useContext(Store)
   const [open, setOpen] = useState(false)
   const [width, setWidth] = useState(window.innerWidth)
@@ -23,25 +37,35 @@ const App = () => {
     const fields = JSON.parse(window.localStorage.getItem('location'))
     const { longitude, latitude } = fields
 
-    const forecastUrl = `https://api.weather.gov/points/${latitude},${longitude}/forecast`
-    const hourlyUrl = `https://api.weather.gov/points/${latitude},${longitude}/forecast/hourly`
-    const sunSetRiseUrl = `https://api.sunrise-sunset.org/json?lat=${latitude}&lng=${longitude}`
+    const proxy = 'https://cors-anywhere.herokuapp.com/'
+    const testUrl = `https://api.darksky.net/forecast/8cfa31a60b0a43daccceb5451adb7568/${latitude},${longitude}`
+    // const forecastUrl = `https://api.weather.gov/points/${latitude},${longitude}/forecast`
+    // const hourlyUrl = `https://api.weather.gov/points/${latitude},${longitude}/forecast/hourly`
+    // const sunSetRiseUrl = `https://api.sunrise-sunset.org/json?lat=${latitude}&lng=${longitude}`
 
-    const forecastData = await fetch(forecastUrl)
-    const forecastDataJSON = await forecastData.json()
-    const { periods: forecastPeriods } = forecastDataJSON.properties
+    const v = proxy + testUrl
 
-    const hourlyData = await fetch(hourlyUrl)
-    const hourlyDataJSON = await hourlyData.json()
-    const { periods: hourlyPeriods } = hourlyDataJSON.properties
+    const testData = await fetch(v)
 
-    const sunSetRiseData = await fetch(sunSetRiseUrl)
-    const sunSetRiseDataJSON = await sunSetRiseData.json()
-    const { results } = sunSetRiseDataJSON
+    const testDataJSON = await testData.json()
+
+    // console.log({ testDataJSON })
+    // const forecastData = await fetch(forecastUrl)
+    // const forecastDataJSON = await forecastData.json()
+    // const { periods: forecastPeriods } = forecastDataJSON.properties
+
+    // const hourlyData = await fetch(hourlyUrl)
+    // const hourlyDataJSON = await hourlyData.json()
+    // const { periods: hourlyPeriods } = hourlyDataJSON.properties
+
+    // const sunSetRiseData = await fetch(sunSetRiseUrl)
+    // const sunSetRiseDataJSON = await sunSetRiseData.json()
+    // const { results } = sunSetRiseDataJSON
+    console.log('called')
 
     return dispatch({
       type: 'FETCH_WEATHER',
-      payload: { forecastPeriods, hourlyPeriods, ...fields, ...results }
+      payload: { ...fields, ...testDataJSON }
     })
   }
 
@@ -124,9 +148,14 @@ const App = () => {
         />
       ) : null}
       {loading ? <CircularProgress /> : null}
-      <CurrentWeather weather={state.weather} onOpen={() => setOpen(true)} />
-      {width > 600 && height > 600 ? <WeatherChart weather={state.weather} /> : null}
-      <Forecast weather={state.weather} />
+      <WeatherCards />
+      {/* <Card className={classes.card}>
+        <CardContent>
+          <CurrentWeather weather={state.weather} onOpen={() => setOpen(true)} />
+          {width > 600 && height > 600 ? <WeatherChart weather={state.weather} /> : null}
+          <Forecast weather={state.weather} />
+        </CardContent>
+      </Card> */}
     </div>
   )
 }

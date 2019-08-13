@@ -17,6 +17,7 @@
     "build": "parcel build ./public/index.html",
     "lint": "eslint --fix --ext js src"
   },
+  "proxy": "http://localhost:5000/",
   "browserslist": {
     "development": [
       "last 2 chrome versions",
