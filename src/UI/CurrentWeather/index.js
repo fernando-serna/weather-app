@@ -4,6 +4,7 @@ import moment from 'moment'
 
 import { useTheme } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
+import ClearIcon from '@material-ui/icons/Clear'
 
 import { IconComponent as Icon } from '../utils'
 import './CurrentWeather.css'
@@ -60,6 +61,7 @@ const CurrentWeather = props => {
           {values.shortForecast}
         </Typography>
       </div>
+      <ClearIcon className="cw-clear" />
       <div className="cw-temp">
         <Icon icon={values.icon} fill={theme.palette.primary.main} height={75} width={75} />
         <div style={{ display: 'flex' }}>

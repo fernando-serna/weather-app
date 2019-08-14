@@ -4,7 +4,7 @@ import { makeStyles, useTheme } from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
-import List from '@material-ui/core/List';
+import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 
 import { Store } from '../../Store'
@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const arr = [1, 2, 3]
+const arr = [1,]
 
 function WeatherCards() {
   const classes = useStyles()
