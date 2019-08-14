@@ -2,7 +2,6 @@
   grid-area: forecast;
   display: flex;
   justify-content: space-evenly;
-  border-top: 1px solid rgba(224, 224, 224, 0.12);
 }
 
 .forecast-item {

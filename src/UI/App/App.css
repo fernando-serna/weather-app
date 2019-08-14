@@ -1,43 +1,60 @@
 .App {
-  /* display: grid;
-  grid-template-rows: 175px 1fr;
-  grid-row-gap: 5px;
+  display: grid;
+  background: #ececec;
+  grid-template-rows: 56px 1fr;
   grid-template-areas:
-    'currentWeather'
-    'forecast'; */
+    'header'
+    'weatherCards';
   /* height: -webkit-fill-available;
   background-color: #282c34; */
   /* overflow: hidden; */
 }
-/* 
-.footer {
-  grid-area: footer;
-  padding: 0 0 10px;
-  align-self: flex-end;
-  text-align: center;
+
+.header {
+  grid-area: header;
+  border: 1px solid red;
+
+  box-shadow: 
+    0 4px 5px 0 rgba(0, 0, 0, 0.14), 
+    0 2px 9px 1px rgba(0, 0, 0, 0.12), 
+    0 4px 2px -2px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  position: fixed;
+  width: -webkit-fill-available;
+  height: 50px;
+  align-items: center;
   color: white;
-  font-size: 12px;
-} */
-
-/* width */
-::-webkit-scrollbar {
-  width: 10px;
+  background: #3f51b5;
+  padding: 0 16px 0;
+  font-family: Verdana, Geneva, sans-serif;
 }
 
-/* Track */
-::-webkit-scrollbar-track {
-  background: #282c34;
+.header h1 {
+  flex: 1;
+  font-size: 1.4em;
+  font-weight: 400;
+  margin: 0;
 }
 
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: #333333;
+.header .author {
+  color: white;
+  font-size: 0.4em;
+  text-decoration: none;
+  font-style: oblique;
+}
+.header button {
+  color: white;
+  opacity: .54;
+  cursor: pointer;
 }
 
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #404040;
+.weatherCards {
+  grid-area: weatherCards;
 }
+
+
 
 /* @media screen and (min-width: 601px) and (min-height: 601px) {
   .App {

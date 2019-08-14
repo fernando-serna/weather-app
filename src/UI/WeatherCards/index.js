@@ -18,7 +18,7 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     width: '100%',
     height: 'fit-content',
-    backgroundColor: 'black',
+    backgroundColor: '#282c34',
   },
   content: {
     width: '100%',
@@ -33,9 +33,9 @@ function WeatherCards() {
   const [open, setOpen] = useState(false)
 
   return (
-    <div>
+    <div className="weatherCards">
       {arr.map(x => (
-        <div className="weatherCards">
+        <div className="weatherCard">
           <Card key={x} className={classes.card}>
             <CardContent className={classes.content}>
               <CurrentWeather weather={state.weather} onOpen={() => setOpen(true)} />

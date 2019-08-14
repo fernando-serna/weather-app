@@ -2,9 +2,13 @@ import React, { useState, useEffect, useContext } from 'react'
 
 
 import { makeStyles } from '@material-ui/core/styles'
+import AppBar from '@material-ui/core/AppBar'
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
+import Toolbar from '@material-ui/core/Toolbar'
+import RefreshIcon from '@material-ui/icons/Refresh'
+import AddToHomeScreenIcon from '@material-ui/icons/AddToHomeScreen'
 
 import { Store } from '../../Store'
 import CurrentWeather from '../CurrentWeather'
@@ -19,6 +23,9 @@ const useStyles = makeStyles({
   card: {
     minWidth: 275
   },
+  root: {
+    flexGrow: 1
+  }
 })
 
 const App = () => {
@@ -148,6 +155,21 @@ const App = () => {
         />
       ) : null}
       {loading ? <CircularProgress /> : null}
+
+      <header className="header">
+        <h1>
+          Weather App&nbsp;
+          <a href="https://www.google.com" className="author">
+            By Fernando Serna
+          </a>
+        </h1>
+        <button type="button" id="butInstall" aria-label="Install">
+          <AddToHomeScreenIcon />
+        </button>
+        <button type="button" id="butRefresh" aria-label="Refresh">
+          <RefreshIcon />
+        </button>
+      </header>
       <WeatherCards />
       {/* <Card className={classes.card}>
         <CardContent>
@@ -156,7 +178,7 @@ const App = () => {
           <Forecast weather={state.weather} />
         </CardContent>
       </Card> */}
-    </div>
+    </div >
   )
 }
 
