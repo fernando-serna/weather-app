@@ -18,9 +18,10 @@ const App = () => {
     Function to fetch longitude and latitude from provided zip code and use
     them in the api calls for weeather data.
   */
-  const fetchWeather = async () => {
+  const fetchWeather = async fields => {
     console.log('fetch weather')
-    const fields = JSON.parse(window.localStorage.getItem('location'))
+    const t1 = performance.now()
+    // const fields = JSON.parse(window.localStorage.getItem('location'))
     const { longitude, latitude } = fields
 
     const proxy = 'https://cors-anywhere.herokuapp.com/'
@@ -30,33 +31,32 @@ const App = () => {
     const weatherData = await fetch(weatherProxy)
     const weatherDataJSON = await weatherData.json()
 
-    dispatch({
-      type: 'SET_DIMENSIONS',
-      payload: { height: window.innerHeight, width: window.innerWidth }
-    })
+    const t2 = performance.now()
+    console.log(`getting weather took ${t2 - t1} ms`)
+    // dispatch()
 
     dispatch({
       type: 'SET_CITIES',
       payload: [...state.cities, { ...fields, ...weatherDataJSON }]
     })
-
-    return dispatch({
-      type: 'FETCH_WEATHER',
-      payload: { ...fields, ...weatherDataJSON }
+    dispatch({
+      type: 'SET_DIMENSIONS',
+      payload: { height: window.innerHeight, width: window.innerWidth }
     })
   }
 
   const getLocation = async zip => {
     console.log('get location')
+    setLoading(true)
+    const t1 = performance.now()
     const zipUrl = `https://public.opendatasoft.com/api/records/1.0/search/?dataset=us-zip-code-latitude-and-longitude&q=${zip}&facet=state&facet=timezone&facet=dst`
-
     const zipData = await fetch(zipUrl)
     const zipDataJSON = await zipData.json()
     const { fields } = zipDataJSON.records[0]
-
-    window.localStorage.setItem('location', JSON.stringify({ ...fields }))
-
-    await fetchWeather()
+    const t2 = performance.now()
+    console.log(`getting location took ${t2 - t1} ms`)
+    await fetchWeather(fields)
+    setLoading(false)
   }
 
   /*
@@ -79,24 +79,19 @@ const App = () => {
     console.log('succ')
     const { longitude, latitude } = s.coords
     const locationUrl = `https://data.opendatasoft.com/api/records/1.0/search/?dataset=us-zip-code-latitude-and-longitude%40public&facet=dst&facet=state&facet=timezone&geofilter.distance=${latitude},${longitude},5000`
-
     const locationData = await fetch(locationUrl)
     const locationDataJSON = await locationData.json()
-
     const { fields } = locationDataJSON.records[0]
-
-    window.localStorage.setItem('location', JSON.stringify({ ...fields }))
 
     dispatch({ type: 'SET_ZIP', payload: Number(fields.zip) })
 
-    await fetchWeather()
+    await fetchWeather(fields)
     setLoading(false)
   }
 
   const err = () => {
     console.log('err')
     setLoading(false)
-    alert('You must enable location services to get current location.')
   }
 
   const handleLocation = () => {
@@ -109,12 +104,11 @@ const App = () => {
   /* Fetch weather on empty weather object */
   useEffect(() => {
     console.log('using effect')
-    if (Object.keys(state.weather).length === 0) {
+    if (Object.keys(state.cities).length === 0) {
       console.log('effect succ')
-      if (window.localStorage.getItem('location')) fetchWeather()
-      else getLocation(state.currentZip)
+      getLocation(state.currentZip)
     }
-  }, [state.weather])
+  }, [])
 
   /* Add window resize listener to decide whether or not chart should be rendered */
   useEffect(() => {
@@ -127,6 +121,7 @@ const App = () => {
         payload: { height: window.innerHeight, width: window.innerWidth }
       })
     }
+
     window.addEventListener('resize', handleResize)
     return () => { window.removeEventListener('resize', handleResize) }
   }, [])
@@ -141,10 +136,10 @@ const App = () => {
           handleLocation={() => handleLocation()}
         />
       ) : null}
-      {loading ? <CircularProgress /> : null}
+      {/* {loading ? <CircularProgress /> : null} */}
       <Header onOpen={() => setOpen(true)} />
 
-      <WeatherCards width={width} height={height} />
+      <WeatherCards width={width} height={height} loading={loading} />
       {/* <Card className={classes.card}>
         <CardContent>
           <CurrentWeather weather={state.weather} onOpen={() => setOpen(true)} />

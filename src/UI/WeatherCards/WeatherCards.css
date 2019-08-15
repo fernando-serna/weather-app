@@ -1,3 +1,10 @@
 .weatherCard {
   padding: 5px 10px 5px;
 }
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+

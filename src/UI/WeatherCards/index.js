@@ -4,6 +4,7 @@ import { makeStyles, useTheme } from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
+import CircularProgress from '@material-ui/core/CircularProgress';
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 
@@ -11,7 +12,7 @@ import { Store } from '../../Store'
 import CurrentWeather from '../CurrentWeather'
 import './WeatherCards.css'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
   card: {
     display: 'flex',
     width: '100%',
@@ -20,12 +21,15 @@ const useStyles = makeStyles(() => ({
   },
   content: {
     width: '100%',
+  },
+  progress: {
+    margin: theme.spacing(2)
   }
 }))
 
 const arr = [1, 2, 3, 4]
 
-const WeatherCards = () => {
+const WeatherCards = props => {
   const classes = useStyles()
   const { state, dispatch } = useContext(Store)
   const [open, setOpen] = useState(false)
@@ -58,6 +62,11 @@ const WeatherCards = () => {
           </Card>
         </div>
       ))}
+      {props.loading ? (
+        <div className="loading">
+          <CircularProgress color="secondary" className={classes.progress} />
+        </div>
+      ) : null}
     </div>
   )
 }
