@@ -1,7 +1,7 @@
 .App {
   display: grid;
   grid-template-rows: 60px 1fr;
-  grid-row-gap: 10px;
+  /* grid-row-gap: 10px; */
   grid-template-areas:
     'header'
     'weatherCards';
@@ -10,10 +10,13 @@
   background-color: #282c34; */
   overflow: auto;
   height: 100vh;
+  /* background-image: linear-gradient(#24C6DC , #514A9D); */
+  background-image: linear-gradient(#085078 , #85D8CE);
+  /* background-image: linear-gradient(#1A2980 , #26D0CE); */
 }
 
 .background {
-  background-image: url('https://images7.alphacoders.com/573/thumb-1920-573281.jpg');
+  background-image: url('https://i.pinimg.com/originals/2a/24/74/2a24740658e1910bcfedbbdd83098c4e.jpg');
   background-size: cover;
   /* background-attachment: fixed; */
   background-position: center;
@@ -28,16 +31,14 @@
 
 .header {
   grid-area: header;
-  /* opacity: .8; */
+  opacity: .7;
   z-index: 1000;
-  border: 1px solid red;
 }
 
 .weatherCards {
   grid-area: weatherCards;
-  opacity: .85;
-  border: 1px solid red;
-  /* height: 100%; */
+  opacity: .8;
+  overflow: scroll;
 }
 
 

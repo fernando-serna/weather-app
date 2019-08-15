@@ -25,9 +25,9 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const arr = [1,]
+const arr = [1, 2, 3, 4]
 
-function WeatherCards() {
+const WeatherCards = props => {
   const classes = useStyles()
   const { state, dispatch } = useContext(Store)
   const [open, setOpen] = useState(false)
@@ -39,7 +39,7 @@ function WeatherCards() {
           <Card key={x} className={classes.card}>
             <CardContent className={classes.content}>
               <CurrentWeather weather={state.weather} onOpen={() => setOpen(true)} />
-              <Forecast weather={state.weather} />
+              <Forecast weather={state.weather} height={props.height} width={props.width} />
             </CardContent>
           </Card>
         </div>

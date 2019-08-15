@@ -13,6 +13,8 @@ const Forecast = props => {
   const { weather } = props
   const theme = useTheme()
   const [forecast, setForecast] = useState([])
+  const [svgWidth, setSvgWidth] = useState(40)
+  const [svgHeight, setSvgHeight] = useState(40)
 
   /* When component mounts, set initial forecast data */
   useEffect(() => {
@@ -74,6 +76,17 @@ const Forecast = props => {
     }
   }, [weather])
 
+  useEffect(() => {
+    if (svgWidth === 40 && props.width > 600) {
+      setSvgHeight(60)
+      setSvgWidth(60)
+    }
+    if (svgWidth === 60 && props.width < 600) {
+      setSvgHeight(40)
+      setSvgWidth(40)
+    }
+  }, [props.height, props.width])
+
   return (
     <div className="forecast">
       {forecast.map(day => (
@@ -84,12 +97,13 @@ const Forecast = props => {
             </Typography>
           </div>
           <div className="forecast-icon">
-            <Icon icon={day.icon} fill={theme.palette.primary.main} height={40} width={40} />
+            <Icon icon={day.icon} fill={theme.palette.primary.main} height={svgHeight} width={svgWidth} />
           </div>
           <div className="forecast-temp">
             <Typography color="secondary" variant="h6">
               {day.high > Number.NEGATIVE_INFINITY ? `${day.high}\u00b0` : null}
             </Typography>
+            <div className="forecast-border">|</div>
             <Typography color="secondary" variant="h6">
               {day.low < Number.POSITIVE_INFINITY ? `${day.low}\u00b0` : null}
             </Typography>

@@ -156,7 +156,7 @@ const App = () => {
       {loading ? <CircularProgress /> : null}
       <Header />
 
-      <WeatherCards />
+      <WeatherCards width={width} height={height} />
       {/* <Card className={classes.card}>
         <CardContent>
           <CurrentWeather weather={state.weather} onOpen={() => setOpen(true)} />
