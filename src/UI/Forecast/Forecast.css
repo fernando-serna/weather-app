@@ -53,7 +53,7 @@
 @media screen and (min-width: 600px) and (max-height: 600px) {
   .forecast {
     justify-content: space-around;
-    padding-top: 10px;
+    padding-top: 20px;
   }
 
   .forecast-day h6 {

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import moment from 'moment'
 
 import { useTheme } from '@material-ui/core/styles'
+import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import ClearIcon from '@material-ui/icons/Clear'
 
@@ -108,6 +109,14 @@ const CurrentWeather = props => {
             {values.sunset}
           </Typography>
         </div>
+      </div>
+      <div className="cw-buttons">
+        <Button variant="outlined" color="primary">
+          Daily
+        </Button>
+        <Button variant="outlined" color="primary">
+          Hourly
+        </Button>
       </div>
     </div>
   )
