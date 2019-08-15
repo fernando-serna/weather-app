@@ -1,33 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react'
 
-
-import { makeStyles } from '@material-ui/core/styles'
-import Card from '@material-ui/core/Card'
-import CardActions from '@material-ui/core/CardActions'
-import CardContent from '@material-ui/core/CardContent'
-
-
 import { Store } from '../../Store'
-import CurrentWeather from '../CurrentWeather'
 import Header from '../Header'
 import WeatherCards from '../WeatherCards'
-import WeatherChart from '../WeatherChart'
-import Forecast from '../Forecast'
 import { DialogComponent as Dialog } from '../Dialog'
 import { CircularProgressComponent as CircularProgress } from '../utils'
 import './App.css'
 
-const useStyles = makeStyles({
-  card: {
-    minWidth: 275
-  },
-  root: {
-    flexGrow: 1
-  }
-})
-
 const App = () => {
-  const classes = useStyles()
   const { state, dispatch } = useContext(Store)
   const [open, setOpen] = useState(false)
   const [width, setWidth] = useState(window.innerWidth)
@@ -39,42 +19,35 @@ const App = () => {
     them in the api calls for weeather data.
   */
   const fetchWeather = async () => {
+    console.log('fetch weather')
     const fields = JSON.parse(window.localStorage.getItem('location'))
     const { longitude, latitude } = fields
 
     const proxy = 'https://cors-anywhere.herokuapp.com/'
-    const testUrl = `https://api.darksky.net/forecast/8cfa31a60b0a43daccceb5451adb7568/${latitude},${longitude}`
-    // const forecastUrl = `https://api.weather.gov/points/${latitude},${longitude}/forecast`
-    // const hourlyUrl = `https://api.weather.gov/points/${latitude},${longitude}/forecast/hourly`
-    // const sunSetRiseUrl = `https://api.sunrise-sunset.org/json?lat=${latitude}&lng=${longitude}`
+    const weatherUrl = `https://api.darksky.net/forecast/8cfa31a60b0a43daccceb5451adb7568/${latitude},${longitude}`
 
-    const v = proxy + testUrl
+    const weatherProxy = proxy + weatherUrl
+    const weatherData = await fetch(weatherProxy)
+    const weatherDataJSON = await weatherData.json()
 
-    const testData = await fetch(v)
+    dispatch({
+      type: 'SET_DIMENSIONS',
+      payload: { height: window.innerHeight, width: window.innerWidth }
+    })
 
-    const testDataJSON = await testData.json()
-
-    // console.log({ testDataJSON })
-    // const forecastData = await fetch(forecastUrl)
-    // const forecastDataJSON = await forecastData.json()
-    // const { periods: forecastPeriods } = forecastDataJSON.properties
-
-    // const hourlyData = await fetch(hourlyUrl)
-    // const hourlyDataJSON = await hourlyData.json()
-    // const { periods: hourlyPeriods } = hourlyDataJSON.properties
-
-    // const sunSetRiseData = await fetch(sunSetRiseUrl)
-    // const sunSetRiseDataJSON = await sunSetRiseData.json()
-    // const { results } = sunSetRiseDataJSON
-    console.log('called')
+    dispatch({
+      type: 'SET_CITIES',
+      payload: [...state.cities, { ...fields, ...weatherDataJSON }]
+    })
 
     return dispatch({
       type: 'FETCH_WEATHER',
-      payload: { ...fields, ...testDataJSON }
+      payload: { ...fields, ...weatherDataJSON }
     })
   }
 
   const getLocation = async zip => {
+    console.log('get location')
     const zipUrl = `https://public.opendatasoft.com/api/records/1.0/search/?dataset=us-zip-code-latitude-and-longitude&q=${zip}&facet=state&facet=timezone&facet=dst`
 
     const zipData = await fetch(zipUrl)
@@ -91,13 +64,19 @@ const App = () => {
     await the retreival of new data and then close the loading component
   */
   const handleSubmit = async zip => {
+    console.log('handle submit')
+    console.log(zip)
     setOpen(false)
+    if (state.cities.some(city => city.zip === String(zip))) {
+      return
+    }
     setLoading(true)
     await getLocation(zip)
     setLoading(false)
   }
 
   const succ = async s => {
+    console.log('succ')
     const { longitude, latitude } = s.coords
     const locationUrl = `https://data.opendatasoft.com/api/records/1.0/search/?dataset=us-zip-code-latitude-and-longitude%40public&facet=dst&facet=state&facet=timezone&geofilter.distance=${latitude},${longitude},5000`
 
@@ -114,12 +93,14 @@ const App = () => {
     setLoading(false)
   }
 
-  const err = e => {
+  const err = () => {
+    console.log('err')
     setLoading(false)
     alert('You must enable location services to get current location.')
   }
 
   const handleLocation = () => {
+    console.log("handle lco")
     setOpen(false)
     setLoading(true)
     navigator.geolocation.getCurrentPosition(succ, err)
@@ -127,17 +108,24 @@ const App = () => {
 
   /* Fetch weather on empty weather object */
   useEffect(() => {
+    console.log('using effect')
     if (Object.keys(state.weather).length === 0) {
+      console.log('effect succ')
       if (window.localStorage.getItem('location')) fetchWeather()
       else getLocation(state.currentZip)
     }
-  })
+  }, [state.weather])
 
   /* Add window resize listener to decide whether or not chart should be rendered */
   useEffect(() => {
+    console.log('resize')
     const handleResize = () => {
       setWidth(window.innerWidth)
       setHeight(window.innerHeight)
+      dispatch({
+        type: 'SET_DIMENSIONS',
+        payload: { height: window.innerHeight, width: window.innerWidth }
+      })
     }
     window.addEventListener('resize', handleResize)
     return () => { window.removeEventListener('resize', handleResize) }
@@ -154,7 +142,7 @@ const App = () => {
         />
       ) : null}
       {loading ? <CircularProgress /> : null}
-      <Header />
+      <Header onOpen={() => setOpen(true)} />
 
       <WeatherCards width={width} height={height} />
       {/* <Card className={classes.card}>

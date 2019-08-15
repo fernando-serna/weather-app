@@ -3,9 +3,9 @@ import React from 'react'
 import Chart from './tempChart'
 import './WeatherChart.css'
 
-const WeatherChart = () => (
+const WeatherChart = props => (
   <div className="weatherChart">
-    <Chart />
+    <Chart weather={props.weather} />
   </div>
 )
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 
@@ -7,15 +7,21 @@ import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import ClearIcon from '@material-ui/icons/Clear'
 
+import { Store } from '../../Store'
+import WeatherChart from '../WeatherChart'
+import Forecast from '../Forecast'
 import { IconComponent as Icon } from '../utils'
 import './CurrentWeather.css'
 
 const CurrentWeather = props => {
   const theme = useTheme()
-  const { weather, onOpen } = props
+  const { state, dispatch } = useContext(Store)
+  const { height, width } = state
+  const { weather } = props
   const [values, setValues] = useState({
     city: ' ----- ',
     state: ' ----- ',
+    zip: '',
     date: moment(new Date()).format('dddd h:mm A'),
     temp: 0,
     icon: '',
@@ -25,16 +31,27 @@ const CurrentWeather = props => {
     wind: ' ----- ',
     humidity: ' ----- '
   })
+  const [chart, setChart] = useState(false)
+
+  const handleFooter = () => {
+    if (width < 600) {
+      return <Forecast weather={weather} height={height} width={width} />
+    }
+    if (chart) {
+      return <WeatherChart weather={weather} />
+    }
+    return <Forecast weather={weather} height={height} width={width} />
+  }
 
   /* Update data on new weather props */
   useEffect(() => {
-    console.log({ weather })
     if (Object.keys(weather).length) {
       const { currently, daily } = weather
 
       setValues({
         city: weather.city,
         state: weather.state,
+        zip: weather.zip,
         date: moment(new Date(currently.time * 1000)).format('dddd h:mm A'),
         shortForecast: currently.summary,
         temp: Math.round(currently.temperature),
@@ -49,7 +66,7 @@ const CurrentWeather = props => {
 
   return (
     <div className="currentWeather">
-      <div className="cw-header" role="button" tabIndex={-1} onClick={onOpen} onKeyPress={onOpen}>
+      <div className="cw-header">
         <Typography color="primary" variant="h4">
           {values.city}
           ,&nbsp;
@@ -62,7 +79,7 @@ const CurrentWeather = props => {
           {values.shortForecast}
         </Typography>
       </div>
-      <ClearIcon className="cw-clear" />
+      <ClearIcon className="cw-clear" onClick={() => props.onDelete(values.zip)} />
       <div className="cw-temp">
         <Icon icon={values.icon} fill={theme.palette.primary.main} height={75} width={75} />
         <div style={{ display: 'flex' }}>
@@ -111,12 +128,15 @@ const CurrentWeather = props => {
         </div>
       </div>
       <div className="cw-buttons">
-        <Button variant="outlined" color="primary">
+        <Button variant="outlined" color="primary" onClick={() => setChart(false)}>
           Daily
         </Button>
-        <Button variant="outlined" color="primary">
+        <Button variant="outlined" color="primary" onClick={() => setChart(true)}>
           Hourly
         </Button>
+      </div>
+      <div className="cw-footer">
+        {handleFooter()}
       </div>
     </div>
   )
@@ -129,8 +149,7 @@ CurrentWeather.propTypes = {
     sunrise: PropTypes.string,
     sunset: PropTypes.string,
     hourlyPeriods: PropTypes.array
-  }).isRequired,
-  onOpen: PropTypes.func.isRequired
+  }).isRequired
 }
 
 export default CurrentWeather

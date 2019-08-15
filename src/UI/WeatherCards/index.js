@@ -9,11 +9,9 @@ import ListItem from '@material-ui/core/ListItem'
 
 import { Store } from '../../Store'
 import CurrentWeather from '../CurrentWeather'
-import WeatherChart from '../WeatherChart'
-import Forecast from '../Forecast'
 import './WeatherCards.css'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   card: {
     display: 'flex',
     width: '100%',
@@ -27,19 +25,35 @@ const useStyles = makeStyles(theme => ({
 
 const arr = [1, 2, 3, 4]
 
-const WeatherCards = props => {
+const WeatherCards = () => {
   const classes = useStyles()
   const { state, dispatch } = useContext(Store)
   const [open, setOpen] = useState(false)
 
+  const removeCity = zip => {
+    const newCities = [...state.cities.filter(city => city.zip !== zip)]
+
+    dispatch({
+      type: 'SET_CITIES',
+      payload: newCities
+    })
+  }
+
+  useEffect(() => {
+    console.log({ state })
+  })
+
   return (
     <div className="weatherCards">
-      {arr.map(x => (
-        <div className="weatherCard">
-          <Card key={x} className={classes.card}>
+      {state.cities.map(city => (
+        <div key={city.zip} className="weatherCard">
+          <Card className={classes.card}>
             <CardContent className={classes.content}>
-              <CurrentWeather weather={state.weather} onOpen={() => setOpen(true)} />
-              <Forecast weather={state.weather} height={props.height} width={props.width} />
+              <CurrentWeather
+                weather={city}
+                onOpen={() => setOpen(true)}
+                onDelete={zip => removeCity(zip)}
+              />
             </CardContent>
           </Card>
         </div>

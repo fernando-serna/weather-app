@@ -5,11 +5,18 @@ export const Store = createContext()
 
 const initialState = {
   weather: {},
-  currentZip: 98007
+  currentZip: 98007,
+  height: null,
+  width: null,
+  cities: []
 }
 
 function reducer(state, action) {
   switch (action.type) {
+    case 'SET_CITIES':
+      return { ...state, cities: [...action.payload] }
+    case 'SET_DIMENSIONS':
+      return { ...state, width: action.payload.width, height: action.payload.height }
     case 'FETCH_WEATHER':
       return { ...state, weather: action.payload }
     case 'SET_ZIP':

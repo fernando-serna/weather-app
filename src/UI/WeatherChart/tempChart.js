@@ -36,11 +36,11 @@ const initialData = [
   }
 ]
 
-const Chart = () => {
+const Chart = props => {
   const theme = useTheme()
   const { primary, secondary } = theme.palette
-  const { state } = React.useContext(Store)
-  const { weather } = state
+  // const { state } = React.useContext(Store)
+  const { weather } = props
   const [data, setData] = useState([...initialData])
 
   /*
@@ -48,27 +48,30 @@ const Chart = () => {
     receive hourly data, loop through the first 30 entries using 3 hour intervals
   */
   const chartRef = useCallback(node => {
+    console.log({ node, weather })
     if (node !== null && Object.keys(weather).length) {
-      const { hourlyPeriods } = weather
+      const { data } = weather.hourly
       const weatherData = []
 
-      for (let i = 0; i < 30; i += 3) {
+      for (let i = 0; i <= 12; i += 1) {
         weatherData.push({
-          name: moment(new Date(hourlyPeriods[i].startTime)).format('h A'),
-          temp: Math.round(hourlyPeriods[i].temperature)
+          name: moment(new Date(data[i].time * 1000)).format('h A'),
+          temp: Math.round(data[i].temperature)
         })
       }
+
+
 
       setData([...weatherData])
     }
   }, [weather])
 
   return (
-    <div ref={chartRef} className="wc-chart" style={{ width: '100%', height: 200 }}>
+    <div ref={chartRef} className="wc-chart" style={{ width: '100%', height: 125 }}>
       <ResponsiveContainer width="99%">
         <AreaChart
           width={500}
-          height={300}
+          height={125}
           data={data}
           margin={{
             top: 20,
@@ -77,7 +80,13 @@ const Chart = () => {
             bottom: 0
           }}
         >
-          <XAxis dataKey="name" stroke={secondary.main} padding={{ left: 10, right: 10 }} />
+          <XAxis
+            dataKey="name"
+            stroke={secondary.main}
+            padding={{ left: 10, right: 10 }}
+            interval="preserveStartEnd"
+            minTickGap={30}
+          />
           <Area type="monotone" dataKey="temp" stroke={primary.main} fill={primary.main}>
             <LabelList dataKey="temp" position="top" fill={secondary.main} />
           </Area>

@@ -9,15 +9,14 @@ import AddToHomeScreenIcon from '@material-ui/icons/AddToHomeScreen'
 
 import './Header.css'
 
-function header() {
+const header = props => {
+  const { onOpen } = props
+
   return (
     <header className="header">
-      <Button variant="outlined" color="primary">
+      <Button variant="outlined" color="primary" onClick={() => onOpen()}>
         Add City
       </Button>
-      {/* <Typography color="secondary" variant="h6">
-        Add City
-      </Typography> */}
       <AddToHomeScreenIcon className="header-home" />
       <RefreshIcon className="header-refresh" />
     </header>
