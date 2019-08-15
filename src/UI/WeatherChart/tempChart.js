@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import moment from 'moment'
 
 import { useTheme } from '@material-ui/core/styles'
@@ -39,9 +39,11 @@ const initialData = [
 const Chart = props => {
   const theme = useTheme()
   const { primary, secondary } = theme.palette
-  // const { state } = React.useContext(Store)
+  const { state } = React.useContext(Store)
+  const { height, width } = state
   const { weather } = props
   const [data, setData] = useState([...initialData])
+  const [chartHeight, setChartHeight] = useState(125)
 
   /*
     Set chart data after dom renders and weather data is available. Since we
@@ -60,18 +62,24 @@ const Chart = props => {
         })
       }
 
-
-
       setData([...weatherData])
     }
   }, [weather])
 
+  useEffect(() => {
+    if (chartHeight !== 200 && height > 600 && width > 600) {
+      setChartHeight(200)
+    } else if (chartHeight !== 125) {
+      setChartHeight(125)
+    }
+  }, [height, width])
+
   return (
-    <div ref={chartRef} className="wc-chart" style={{ width: '100%', height: 125 }}>
+    <div ref={chartRef} className="wc-chart" style={{ width: '100%', height: chartHeight }}>
       <ResponsiveContainer width="99%">
         <AreaChart
           width={500}
-          height={125}
+          height={chartHeight}
           data={data}
           margin={{
             top: 20,
@@ -85,7 +93,7 @@ const Chart = props => {
             stroke={secondary.main}
             padding={{ left: 10, right: 10 }}
             interval="preserveStartEnd"
-            minTickGap={30}
+            minTickGap={40}
           />
           <Area type="monotone" dataKey="temp" stroke={primary.main} fill={primary.main}>
             <LabelList dataKey="temp" position="top" fill={secondary.main} />

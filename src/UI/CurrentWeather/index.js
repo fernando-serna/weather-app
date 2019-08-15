@@ -34,6 +34,14 @@ const CurrentWeather = props => {
   const [chart, setChart] = useState(false)
 
   const handleFooter = () => {
+    if (width > 600 && height > 600) {
+      return (
+        <React.Fragment>
+          <WeatherChart weather={weather} />
+          <Forecast weather={weather} height={height} width={width} />
+        </React.Fragment>
+      )
+    }
     if (width < 600) {
       return <Forecast weather={weather} height={height} width={width} />
     }

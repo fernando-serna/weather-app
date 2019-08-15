@@ -22,6 +22,7 @@
 
 .cw-clear {
   grid-area: cw-clear;
+  cursor: pointer;
   color: white;
   opacity: .5;
 }
@@ -37,7 +38,6 @@
 .cw-header {
   grid-area: cw-header;
   width: fit-content;
-  cursor: pointer;
 }
 
 .cw-header h4 {
@@ -114,5 +114,23 @@
 
   .cw-buttons button {
     margin: 5px;
+  }
+}
+
+@media screen and (min-width: 601px) and (min-height: 601px) {
+  .currentWeather {
+    grid-template-rows: 100px 100px 1fr;
+  }
+
+  .cw-header h4 {
+    line-height: 40px;
+  }
+
+  .currentWeather h6 {
+    line-height: 18px;
+  }
+
+  .cw-buttons {
+    display: none;
   }
 }

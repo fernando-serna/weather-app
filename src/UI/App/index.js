@@ -64,12 +64,12 @@ const App = () => {
     await the retreival of new data and then close the loading component
   */
   const handleSubmit = async zip => {
-    console.log('handle submit')
-    console.log(zip)
     setOpen(false)
+
     if (state.cities.some(city => city.zip === String(zip))) {
       return
     }
+
     setLoading(true)
     await getLocation(zip)
     setLoading(false)
