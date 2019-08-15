@@ -33,11 +33,10 @@
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #434956;
-  opacity: .8;
+  background: transparent;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #282c34; 
+  background: transparent; 
 }

@@ -32,6 +32,8 @@ const CurrentWeather = props => {
     humidity: ' ----- '
   })
   const [chart, setChart] = useState(false)
+  const [svgWidth, setSvgWidth] = useState(75)
+  const [svgHeight, setSvgHeight] = useState(75)
 
   const handleFooter = () => {
     if (width > 600 && height > 600) {
@@ -89,7 +91,7 @@ const CurrentWeather = props => {
       </div>
       <ClearIcon className="cw-clear" onClick={() => props.onDelete(values.zip)} />
       <div className="cw-temp">
-        <Icon icon={values.icon} fill={theme.palette.primary.main} height={75} width={75} />
+        <Icon icon={values.icon} fill={theme.palette.primary.main} height={svgHeight} width={svgWidth} />
         <div style={{ display: 'flex' }}>
           <Typography color="secondary" variant="h3">
             {values.temp}
