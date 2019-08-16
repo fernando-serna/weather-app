@@ -35,11 +35,17 @@ const WeatherCards = props => {
   const [open, setOpen] = useState(false)
 
   const removeCity = zip => {
-    const newCities = [...state.cities.filter(city => city.zip !== zip)]
-
+    console.log('remove', zip)
+    const newCities = [...state.cities.filter(city => city.zip_code !== zip)]
+    const locations = [...state.locations.filter(location => location.zip_code !== zip)]
+    localStorage.setItem('locations', JSON.stringify(locations))
     dispatch({
       type: 'SET_CITIES',
       payload: newCities
+    })
+    dispatch({
+      type: 'SET_LOCATIONS',
+      payload: locations
     })
   }
 
@@ -50,7 +56,7 @@ const WeatherCards = props => {
   return (
     <div className="weatherCards">
       {state.cities.map(city => (
-        <div key={city.zip} className="weatherCard">
+        <div key={city.zip_code} className="weatherCard">
           <Card className={classes.card}>
             <CardContent className={classes.content}>
               <CurrentWeather

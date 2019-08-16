@@ -10,7 +10,13 @@ import AddToHomeScreenIcon from '@material-ui/icons/AddToHomeScreen'
 import './Header.css'
 
 const header = props => {
-  const { onOpen } = props
+  const { refresh, onOpen } = props
+
+  const onRefresh = () => {
+    const locationsJSON = localStorage.getItem('locations')
+    const locations = JSON.parse(locationsJSON)
+    refresh(locations)
+  }
 
   return (
     <header className="header">
@@ -18,7 +24,7 @@ const header = props => {
         Add City
       </Button>
       <AddToHomeScreenIcon className="header-home" />
-      <RefreshIcon className="header-refresh" />
+      <RefreshIcon className="header-refresh" onClick={() => onRefresh()} />
     </header>
   )
 }

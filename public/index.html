@@ -2,20 +2,36 @@
 <html lang="en">
 
 <head>
-  <link rel="shortcut icon" href="./weather_storm.ico" />
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-  <meta name="theme-color" content="#000000" />
-  <link rel="apple-touch-icon" href="cloud-icon.png" />
+  <title>Weather App</title>
+
+  <link rel="shortcut icon" href="./favicon.ico" />
 
   <link rel="manifest" href="./manifest.webmanifest">
 
-  <title>Weather App</title>
+  <meta name="apple-mobile-web-app-cabale" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Weather PWA">
+  <link rel="apple-touch-icon" href="cloud-icon.png" />
+
+  <meta name="description" content="Fernando's weather PWA">
+  <meta name="theme-color" content="#000000" />
 </head>
 
 <body style="margin: 0">
   <div id="root"></div>
   <script type="text/javascript" src="../src/index.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/serviceWorker.js')
+          .then((reg) => {
+            console.log('Service worker registered.', reg);
+          });
+      });
+    }
+  </script>
 </body>
 
 </html>

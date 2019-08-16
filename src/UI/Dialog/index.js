@@ -139,7 +139,7 @@ export const DialogComponent = props => {
       </DialogTitle>
       <DialogContent dividers>
         <div className="dialog-content">
-          <Button
+          {/* <Button
             className={classes.button}
             variant="outlined"
             color="primary"
@@ -147,8 +147,9 @@ export const DialogComponent = props => {
           >
             Get Location
           </Button>
-          <p>or</p>
+          <p>or</p> */}
           <TextField
+            autoFocus
             fullWidth
             error={error}
             helperText={error ? 'Please enter a valid zip code' : null}

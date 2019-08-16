@@ -1,6 +1,6 @@
 {
-  "short_name": "Weather",
   "name": "Weather App",
+  "short_name": "Weather",
   "icons": [
     {
       "src": "favicon.ico",
@@ -18,8 +18,8 @@
       "type": "image/png"
     }
   ],
-  "start_url": ".",
+  "start_url": "/index.html",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#3E4EB8",
+  "background_color": "#2F3BA2"
 }

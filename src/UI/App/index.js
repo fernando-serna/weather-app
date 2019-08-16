@@ -21,11 +21,10 @@ const App = () => {
   const fetchWeather = async fields => {
     console.log('fetch weather')
     const t1 = performance.now()
-    // const fields = JSON.parse(window.localStorage.getItem('location'))
-    const { longitude, latitude } = fields
+    const { lng, lat } = fields
 
     const proxy = 'https://cors-anywhere.herokuapp.com/'
-    const weatherUrl = `https://api.darksky.net/forecast/8cfa31a60b0a43daccceb5451adb7568/${latitude},${longitude}`
+    const weatherUrl = `https://api.darksky.net/forecast/8cfa31a60b0a43daccceb5451adb7568/${lat},${lng}`
 
     const weatherProxy = proxy + weatherUrl
     const weatherData = await fetch(weatherProxy)
@@ -35,27 +34,48 @@ const App = () => {
     console.log(`getting weather took ${t2 - t1} ms`)
     // dispatch()
 
-    dispatch({
-      type: 'SET_CITIES',
-      payload: [...state.cities, { ...fields, ...weatherDataJSON }]
-    })
-    dispatch({
-      type: 'SET_DIMENSIONS',
-      payload: { height: window.innerHeight, width: window.innerWidth }
-    })
+    return { ...fields, ...weatherDataJSON }
   }
 
   const getLocation = async zip => {
     console.log('get location')
     setLoading(true)
     const t1 = performance.now()
-    const zipUrl = `https://public.opendatasoft.com/api/records/1.0/search/?dataset=us-zip-code-latitude-and-longitude&q=${zip}&facet=state&facet=timezone&facet=dst`
-    const zipData = await fetch(zipUrl)
+    const proxy = 'https://cors-anywhere.herokuapp.com/'
+    const zipUrl = `https://www.zipcodeapi.com/rest/eYdVjHCR4cr0PN0nTkpTGlYkrJyJrNiBxAoE8PZjESaEgajJMfkZvpDgNOhfaExF/info.json/${zip}/degrees`
+
+    const zipProxy = proxy + zipUrl
+
+    // `https://public.opendatasoft.com/api/records/1.0/search/?dataset=us-zip-code-latitude-and-longitude&q=${zip}&facet=state&facet=timezone&facet=dst`
+
+    const zipData = await fetch(zipProxy)
     const zipDataJSON = await zipData.json()
-    const { fields } = zipDataJSON.records[0]
+    console.log({ zipDataJSON })
+
+    // const { fields } = zipDataJSON.records[0]
     const t2 = performance.now()
     console.log(`getting location took ${t2 - t1} ms`)
-    await fetchWeather(fields)
+    const city = await fetchWeather(zipDataJSON)
+
+    const cities = [...state.cities, city]
+
+    const locations = [...state.locations, { ...zipDataJSON }]
+
+    localStorage.setItem('locations', JSON.stringify(locations))
+
+    dispatch({
+      type: 'SET_LOCATIONS',
+      payload: locations
+    })
+    dispatch({
+      type: 'SET_CITIES',
+      payload: cities
+    })
+    dispatch({
+      type: 'SET_DIMENSIONS',
+      payload: { height: window.innerHeight, width: window.innerWidth }
+    })
+
     setLoading(false)
   }
 
@@ -85,7 +105,23 @@ const App = () => {
 
     dispatch({ type: 'SET_ZIP', payload: Number(fields.zip) })
 
-    await fetchWeather(fields)
+    const city = await fetchWeather(fields)
+
+    const cities = [...state.cities, city]
+    const { lng, lat, zip } = fields
+
+    const locations = [...state.locations, { ...fields }]
+    localStorage.setItem('locations', JSON.stringify(locations))
+
+    dispatch({
+      type: 'SET_CITIES',
+      payload: cities
+    })
+    dispatch({
+      type: 'SET_LOCATIONS',
+      payload: locations
+    })
+
     setLoading(false)
   }
 
@@ -101,12 +137,60 @@ const App = () => {
     navigator.geolocation.getCurrentPosition(succ, err)
   }
 
+  const getNetworkCities = async locations => {
+    const newCities = await Promise.all(
+      locations.map(async location => fetchWeather(location))
+    )
+
+    return dispatch({ type: 'SET_CITIES', payload: newCities })
+  }
+
+  const getCacheCities = async locations => {
+    if (!('caches' in window)) {
+      return null
+    }
+
+    const cacheCities = await Promise.all(
+      locations.map(async location => {
+        const { lng, lat } = location
+        const weatherUrl = `forecast/${lat},${lng}`
+        const url = `${window.location.origin}/${weatherUrl}`
+
+        return caches.match(url)
+          .then(async response => {
+            if (response) {
+              const weather = await response.json()
+              return { ...weather, ...location }
+            }
+            return null
+          })
+          .catch(e => {
+            console.error('Error getting data from cache', e)
+            return null
+          })
+      })
+    )
+
+    return dispatch({ type: 'SET_CITIES', payload: cacheCities })
+  }
+
   /* Fetch weather on empty weather object */
   useEffect(() => {
-    console.log('using effect')
     if (Object.keys(state.cities).length === 0) {
-      console.log('effect succ')
-      getLocation(state.currentZip)
+      const locationsJSON = localStorage.getItem('locations')
+
+      if (locationsJSON) {
+        const locations = JSON.parse(locationsJSON)
+        dispatch({
+          type: 'SET_LOCATIONS',
+          payload: locations
+        })
+
+        getCacheCities(locations)
+        getNetworkCities(locations)
+      } else {
+        getLocation(state.currentZip)
+      }
     }
   }, [])
 
@@ -137,7 +221,7 @@ const App = () => {
         />
       ) : null}
       {/* {loading ? <CircularProgress /> : null} */}
-      <Header onOpen={() => setOpen(true)} />
+      <Header refresh={locations => getNetworkCities(locations)} onOpen={() => setOpen(true)} />
 
       <WeatherCards width={width} height={height} loading={loading} />
       {/* <Card className={classes.card}>
