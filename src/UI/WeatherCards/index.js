@@ -56,7 +56,7 @@ const WeatherCards = props => {
   return (
     <div className="weatherCards">
       {state.cities.map(city => (
-        <div key={city.zip_code} className="weatherCard">
+        <div key={city.zip} className="weatherCard">
           <Card className={classes.card}>
             <CardContent className={classes.content}>
               <CurrentWeather

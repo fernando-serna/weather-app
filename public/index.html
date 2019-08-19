@@ -20,18 +20,18 @@
 </head>
 
 <body style="margin: 0">
+
   <div id="root"></div>
-  <script type="text/javascript" src="../src/index.js"></script>
   <script>
+    // Check that service workers are supported
     if ('serviceWorker' in navigator) {
+      // Use the window load event to keep the page load performant
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/serviceWorker.js')
-          .then((reg) => {
-            console.log('Service worker registered.', reg);
-          });
-      });
+        navigator.serviceWorker.register('/service-worker.js')
+      })
     }
   </script>
+  <script type="text/javascript" src="../src/index.js"></script>
 </body>
 
 </html>

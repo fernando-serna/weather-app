@@ -14,7 +14,7 @@
   },
   "scripts": {
     "start": "parcel ./public/index.html",
-    "build": "parcel build ./public/index.html",
+    "build": "parcel build ./public/index.html && workbox injectManifest workbox-config.js",
     "lint": "eslint --fix --ext js src"
   },
   "proxy": "http://localhost:5000/",

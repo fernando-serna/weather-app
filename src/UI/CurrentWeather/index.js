@@ -61,7 +61,7 @@ const CurrentWeather = props => {
       setValues({
         city: weather.city,
         state: weather.state,
-        zip: weather.zip_code,
+        zip: weather.zip,
         date: moment(new Date(currently.time * 1000)).format('dddd h:mm A'),
         shortForecast: currently.summary,
         temp: Math.round(currently.temperature),

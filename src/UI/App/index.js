@@ -7,6 +7,8 @@ import { DialogComponent as Dialog } from '../Dialog'
 import { CircularProgressComponent as CircularProgress } from '../utils'
 import './App.css'
 
+const proxy = 'https://cors-anywhere.herokuapp.com/'
+
 const App = () => {
   const { state, dispatch } = useContext(Store)
   const [open, setOpen] = useState(false)
@@ -21,12 +23,14 @@ const App = () => {
   const fetchWeather = async fields => {
     console.log('fetch weather')
     const t1 = performance.now()
-    const { lng, lat } = fields
+    const { longitude: lng, latitude: lat } = fields
 
-    const proxy = 'https://cors-anywhere.herokuapp.com/'
-    const weatherUrl = `https://api.darksky.net/forecast/8cfa31a60b0a43daccceb5451adb7568/${lat},${lng}`
+    console.log({ env: process.env.NODE_ENV === 'development' })
+    const weatherUrl = `${process.env.WEATHER_API}/${lat},${lng}`
 
     const weatherProxy = proxy + weatherUrl
+    // debugger
+    console.log({ weatherProxy })
     const weatherData = await fetch(weatherProxy)
     const weatherDataJSON = await weatherData.json()
 
@@ -41,25 +45,27 @@ const App = () => {
     console.log('get location')
     setLoading(true)
     const t1 = performance.now()
-    const proxy = 'https://cors-anywhere.herokuapp.com/'
-    const zipUrl = `https://www.zipcodeapi.com/rest/eYdVjHCR4cr0PN0nTkpTGlYkrJyJrNiBxAoE8PZjESaEgajJMfkZvpDgNOhfaExF/info.json/${zip}/degrees`
+    // const proxy = 'https://cors-anywhere.herokuapp.com/'
+    const zipUrl = `https://public.opendatasoft.com/api/records/1.0/search/?dataset=us-zip-code-latitude-and-longitude&q=${zip}&facet=state&facet=timezone&facet=dst`
 
-    const zipProxy = proxy + zipUrl
+    // const zipProxy = proxy + zipUrl
 
     // `https://public.opendatasoft.com/api/records/1.0/search/?dataset=us-zip-code-latitude-and-longitude&q=${zip}&facet=state&facet=timezone&facet=dst`
 
-    const zipData = await fetch(zipProxy)
+    const zipData = await fetch(zipUrl)
     const zipDataJSON = await zipData.json()
     console.log({ zipDataJSON })
+    const { fields } = zipDataJSON.records[0]
+
 
     // const { fields } = zipDataJSON.records[0]
     const t2 = performance.now()
     console.log(`getting location took ${t2 - t1} ms`)
-    const city = await fetchWeather(zipDataJSON)
+    const city = await fetchWeather(fields)
 
     const cities = [...state.cities, city]
 
-    const locations = [...state.locations, { ...zipDataJSON }]
+    const locations = [...state.locations, { ...fields }]
 
     localStorage.setItem('locations', JSON.stringify(locations))
 
@@ -108,7 +114,7 @@ const App = () => {
     const city = await fetchWeather(fields)
 
     const cities = [...state.cities, city]
-    const { lng, lat, zip } = fields
+    const { longitude: lng, latitude: lat, zip } = fields
 
     const locations = [...state.locations, { ...fields }]
     localStorage.setItem('locations', JSON.stringify(locations))
@@ -141,7 +147,8 @@ const App = () => {
     const newCities = await Promise.all(
       locations.map(async location => fetchWeather(location))
     )
-
+    console.info('*****Network Cities*****')
+    // debugger
     return dispatch({ type: 'SET_CITIES', payload: newCities })
   }
 
@@ -152,16 +159,26 @@ const App = () => {
 
     const cacheCities = await Promise.all(
       locations.map(async location => {
-        const { lng, lat } = location
-        const weatherUrl = `forecast/${lat},${lng}`
-        const url = `${window.location.origin}/${weatherUrl}`
+        console.info('*****Cache Cities*****')
+        const { longitude: lng, latitude: lat } = location
+        const weatherUrl = `${proxy + process.env.WEATHER_API}/${lat},${lng}`
+        // const url = `${window.location.origin}/${weatherUrl}`
 
-        return caches.match(url)
+        // debugger
+
+        return caches.match(weatherUrl)
           .then(async response => {
+            // debugger
             if (response) {
+              console.log('there is a response')
+
               const weather = await response.json()
+              // debugger
               return { ...weather, ...location }
             }
+
+            console.log('no response')
+            // const networkResponse = await fetchWeather(location)
             return null
           })
           .catch(e => {
@@ -171,7 +188,10 @@ const App = () => {
       })
     )
 
-    return dispatch({ type: 'SET_CITIES', payload: cacheCities })
+    if (cacheCities[0]) {
+      console.log('setting cities')
+      dispatch({ type: 'SET_CITIES', payload: cacheCities })
+    }
   }
 
   /* Fetch weather on empty weather object */
@@ -188,31 +208,38 @@ const App = () => {
 
         getCacheCities(locations)
         getNetworkCities(locations)
+        // const v = await fetchWeather(location)
+
+        // getNetworkCities(locations)
       } else {
         getLocation(state.currentZip)
       }
     }
+    console.info('*****APP mounted*****')
   }, [])
+
+  useEffect(() => {
+    console.log('cities updated', state.cities)
+  }, [state.cities])
 
   /* Add window resize listener to decide whether or not chart should be rendered */
-  useEffect(() => {
-    console.log('resize')
-    const handleResize = () => {
-      setWidth(window.innerWidth)
-      setHeight(window.innerHeight)
-      dispatch({
-        type: 'SET_DIMENSIONS',
-        payload: { height: window.innerHeight, width: window.innerWidth }
-      })
-    }
+  // useEffect(() => {
+  //   console.log('resize')
+  //   const handleResize = () => {
+  //     setWidth(window.innerWidth)
+  //     setHeight(window.innerHeight)
+  //     dispatch({
+  //       type: 'SET_DIMENSIONS',
+  //       payload: { height: window.innerHeight, width: window.innerWidth }
+  //     })
+  //   }
 
-    window.addEventListener('resize', handleResize)
-    return () => { window.removeEventListener('resize', handleResize) }
-  }, [])
+  //   window.addEventListener('resize', handleResize)
+  //   return () => { window.removeEventListener('resize', handleResize) }
+  // }, [])
 
   return (
     <div className="App">
-      {/* <div className="background" /> */}
       {open ? (
         <Dialog
           onClose={() => setOpen(false)}
@@ -220,17 +247,10 @@ const App = () => {
           handleLocation={() => handleLocation()}
         />
       ) : null}
-      {/* {loading ? <CircularProgress /> : null} */}
+      {loading ? <CircularProgress /> : null}
       <Header refresh={locations => getNetworkCities(locations)} onOpen={() => setOpen(true)} />
 
       <WeatherCards width={width} height={height} loading={loading} />
-      {/* <Card className={classes.card}>
-        <CardContent>
-          <CurrentWeather weather={state.weather} onOpen={() => setOpen(true)} />
-          {width > 600 && height > 600 ? <WeatherChart weather={state.weather} /> : null}
-          <Forecast weather={state.weather} />
-        </CardContent>
-      </Card> */}
     </div>
   )
 }
