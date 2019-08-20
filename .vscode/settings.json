@@ -1,0 +1,4 @@
+{
+  "appService.defaultWebAppToDeploy": "/subscriptions/e0007193-9bac-48ba-803e-709dce1fa0ef/resourceGroups/ilp-rg/providers/Microsoft.Web/sites/ilp-fernando",
+  "appService.deploySubpath": "dist"
+}

@@ -1,7 +1,9 @@
 module.exports = {
   "globDirectory": "dist/",
   "globPatterns": [
-    "**/*.{png,ico,html,js,webmanifest,json,css}"
+    "**/*.css",
+    "index.html",
+    "js/animation.js",
   ],
   "swDest": "dist/service-worker.js",
   "swSrc": "public/service-worker.js",

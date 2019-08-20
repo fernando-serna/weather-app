@@ -40,8 +40,8 @@ const Chart = props => {
   const theme = useTheme()
   const { primary, secondary } = theme.palette
   const { state } = React.useContext(Store)
-  const { height, width } = state
-  const { weather } = props
+  // const { height, width } = state
+  const { weather, height, width } = props
   const [data, setData] = useState([...initialData])
   const [chartHeight, setChartHeight] = useState(125)
 
@@ -50,7 +50,6 @@ const Chart = props => {
     receive hourly data, loop through the first 30 entries using 3 hour intervals
   */
   const chartRef = useCallback(node => {
-    console.log({ node, weather })
     if (node !== null && Object.keys(weather).length) {
       const { data } = weather.hourly
       const weatherData = []

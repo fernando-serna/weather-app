@@ -15,9 +15,7 @@ import './CurrentWeather.css'
 
 const CurrentWeather = props => {
   const theme = useTheme()
-  const { state, dispatch } = useContext(Store)
-  const { height, width } = state
-  const { weather } = props
+  const { weather, height, width } = props
   const [values, setValues] = useState({
     city: ' ----- ',
     state: ' ----- ',
@@ -39,7 +37,7 @@ const CurrentWeather = props => {
     if (width > 600 && height > 600) {
       return (
         <React.Fragment>
-          <WeatherChart weather={weather} />
+          <WeatherChart height={height} width={width} weather={weather} />
           <Forecast weather={weather} height={height} width={width} />
         </React.Fragment>
       )
@@ -48,7 +46,7 @@ const CurrentWeather = props => {
       return <Forecast weather={weather} height={height} width={width} />
     }
     if (chart) {
-      return <WeatherChart weather={weather} />
+      return <WeatherChart height={height} width={width} weather={weather} />
     }
     return <Forecast weather={weather} height={height} width={width} />
   }

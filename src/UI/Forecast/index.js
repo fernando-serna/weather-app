@@ -45,7 +45,6 @@ const Forecast = props => {
       const week = []
       const { daily } = weather
       const { data } = daily
-      console.log({ weather })
 
       for (let i = 1; i < data.length; i += 1) {
         week.push({
