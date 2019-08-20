@@ -8,6 +8,8 @@ import App from './UI/App'
 import muiTheme from './Theme'
 import * as serviceWorker from './serviceWorker';
 
+import './index.css'
+
 ReactDOM.render(
   <MuiThemeProvider theme={muiTheme}>
     <StoreProvider>
