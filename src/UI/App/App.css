@@ -4,8 +4,7 @@
   grid-template-areas:
     'header'
     'weatherCards';
-  height: 100vh;
-  background-image: linear-gradient(#085078 , #85D8CE);
+  height: 100%;
 }
 
 .header {
