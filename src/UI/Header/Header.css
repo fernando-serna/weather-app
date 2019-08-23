@@ -1,29 +1,32 @@
 .header {
   background: #282c34;
+  /* display: flex;
+  justify-content: space-around;
+  align-items: center; */
   display: grid;
-  grid-template-columns: 1fr 40px 40px;
-  grid-template-areas: '. header-home header-refresh';
+  grid-template-columns: 200px 1fr 75px;
+  grid-template-areas: '. . header-refresh';
   align-items: center;
 }
 
 .header button {
-/* flex: 1; */
-  /* font-size: 1em; */
   font-family: Verdana, Geneva, sans-serif;
-  /* padding: 15px:? 15px 0; */
   width: 150px;
   margin-left: 15px;
-  /* font-style: oblique; */
-}
-
-.header-home {
-  color: white;
-  opacity: .54;
-  cursor: pointer;
 }
 
 .header-refresh {
+  grid-area: header-refresh;
+  margin-right: 15px;
+  justify-self: end;
   color: white;
   opacity: .54;
   cursor: pointer;
+  width: 100%;
+}
+
+@media screen and (min-width: 601px) {
+  .header-refresh {
+    margin-right: 30px;
+  }
 }

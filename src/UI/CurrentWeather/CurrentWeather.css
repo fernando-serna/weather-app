@@ -20,6 +20,10 @@
   display: none;
 }
 
+.cw-buttons button {
+  cursor: pointer;
+}
+
 .cw-clear {
   grid-area: cw-clear;
   cursor: pointer;

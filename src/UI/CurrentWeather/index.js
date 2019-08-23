@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 
@@ -7,7 +7,6 @@ import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import ClearIcon from '@material-ui/icons/Clear'
 
-import { Store } from '../../Store'
 import WeatherChart from '../WeatherChart'
 import Forecast from '../Forecast'
 import { IconComponent as Icon } from '../utils'
@@ -30,8 +29,6 @@ const CurrentWeather = props => {
     humidity: ' ----- '
   })
   const [chart, setChart] = useState(false)
-  const [svgWidth, setSvgWidth] = useState(75)
-  const [svgHeight, setSvgHeight] = useState(75)
 
   const handleFooter = () => {
     if (width > 600 && height > 600) {
@@ -45,10 +42,12 @@ const CurrentWeather = props => {
     if (width < 600) {
       return <Forecast weather={weather} height={height} width={width} />
     }
-    if (chart) {
-      return <WeatherChart height={height} width={width} weather={weather} />
-    }
-    return <Forecast weather={weather} height={height} width={width} />
+    return (
+      <React.Fragment>
+        <WeatherChart height={height} width={width} weather={weather} display={chart} />
+        <Forecast weather={weather} height={height} width={width} />
+      </React.Fragment>
+    )
   }
 
   /* Update data on new weather props */
@@ -89,7 +88,7 @@ const CurrentWeather = props => {
       </div>
       <ClearIcon className="cw-clear" onClick={() => props.onDelete(values.zip)} />
       <div className="cw-temp">
-        <Icon icon={values.icon} fill={theme.palette.primary.main} height={svgHeight} width={svgWidth} />
+        <Icon icon={values.icon} fill={theme.palette.primary.main} height={75} width={75} />
         <div style={{ display: 'flex' }}>
           <Typography color="secondary" variant="h3">
             {values.temp}
@@ -136,10 +135,7 @@ const CurrentWeather = props => {
         </div>
       </div>
       <div className="cw-buttons">
-        <Button variant="outlined" color="primary" onClick={() => setChart(false)}>
-          Daily
-        </Button>
-        <Button variant="outlined" color="primary" onClick={() => setChart(true)}>
+        <Button variant="outlined" color="primary" onClick={() => setChart(!chart)}>
           Hourly
         </Button>
       </div>

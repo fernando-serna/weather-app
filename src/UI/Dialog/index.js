@@ -109,7 +109,7 @@ DialogActions.propTypes = {
 export const DialogComponent = props => {
   const classes = useStyles()
   const { state, dispatch } = useContext(Store)
-  const { onSubmit, onClose, handleLocation } = props
+  const { onSubmit, onClose } = props
   const [zip, setZip] = useState(state.currentZip)
   const [error, setError] = useState(false)
 

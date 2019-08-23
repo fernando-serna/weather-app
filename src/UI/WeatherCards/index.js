@@ -41,6 +41,11 @@ const WeatherCards = props => {
 
   return (
     <div className="weatherCards">
+      {loading ? (
+        <div className="loading">
+          <CircularProgress color="secondary" className={classes.progress} />
+        </div>
+      ) : null}
       {state.cities.map(city => (
         <div key={city.zip} className="weatherCard">
           <Card className={classes.card}>
@@ -55,11 +60,6 @@ const WeatherCards = props => {
           </Card>
         </div>
       ))}
-      {loading ? (
-        <div className="loading">
-          <CircularProgress color="secondary" className={classes.progress} />
-        </div>
-      ) : null}
     </div>
   )
 }

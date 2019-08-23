@@ -3,44 +3,17 @@ import moment from 'moment'
 
 import { useTheme } from '@material-ui/core/styles'
 import { AreaChart, LabelList, Area, XAxis, ResponsiveContainer } from 'recharts'
-import { Store } from '../../Store'
 
 const initialData = [
   {
     name: 'Page A',
     temp: 4000
-  },
-  {
-    name: 'Page B',
-    temp: 3000
-  },
-  {
-    name: 'Page C',
-    temp: 2000
-  },
-  {
-    name: 'Page D',
-    temp: 2780
-  },
-  {
-    name: 'Page E',
-    temp: 1890
-  },
-  {
-    name: 'Page F',
-    temp: 2390
-  },
-  {
-    name: 'Page G',
-    temp: 3490
   }
 ]
 
 const Chart = props => {
   const theme = useTheme()
   const { primary, secondary } = theme.palette
-  const { state } = React.useContext(Store)
-  // const { height, width } = state
   const { weather, height, width } = props
   const [data, setData] = useState([...initialData])
   const [chartHeight, setChartHeight] = useState(125)
@@ -71,10 +44,11 @@ const Chart = props => {
     } else if (chartHeight !== 125) {
       setChartHeight(125)
     }
+    // eslint-disable-next-line
   }, [height, width])
 
   return (
-    <div ref={chartRef} className="wc-chart" style={{ width: '100%', height: chartHeight }}>
+    <div ref={chartRef} style={{ width: '100%', height: chartHeight }}>
       <ResponsiveContainer width="99%">
         <AreaChart
           width={500}

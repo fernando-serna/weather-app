@@ -85,7 +85,7 @@ const Forecast = props => {
       setSvgHeight(40)
       setSvgWidth(40)
     }
-  }, [props.height, props.width])
+  }, [svgWidth, props.height, props.width])
 
   return (
     <div className="forecast">

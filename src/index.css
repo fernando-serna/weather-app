@@ -3,3 +3,7 @@ body {
   height: 100vh;
   background-image: linear-gradient(#085078 , #85D8CE);
 }
+
+#root {
+  height: 100vh;
+}

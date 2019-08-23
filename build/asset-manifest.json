@@ -1,15 +1,28 @@
 {
   "files": {
-    "main.css": "/static/css/main.126071af.chunk.css",
-    "main.js": "/static/js/main.7aeaa276.chunk.js",
-    "main.js.map": "/static/js/main.7aeaa276.chunk.js.map",
+    "main.css": "/static/css/main.6599a5e6.chunk.css",
+    "main.js": "/static/js/main.864c5ad4.chunk.js",
+    "main.js.map": "/static/js/main.864c5ad4.chunk.js.map",
     "runtime~main.js": "/static/js/runtime~main.480bd28e.js",
     "runtime~main.js.map": "/static/js/runtime~main.480bd28e.js.map",
-    "static/js/2.0046cba4.chunk.js": "/static/js/2.0046cba4.chunk.js",
-    "static/js/2.0046cba4.chunk.js.map": "/static/js/2.0046cba4.chunk.js.map",
+    "static/js/2.8ee6b16b.chunk.js": "/static/js/2.8ee6b16b.chunk.js",
+    "static/js/2.8ee6b16b.chunk.js.map": "/static/js/2.8ee6b16b.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.b4eb0009fe377cb6aaa716c90433efb9.js": "/precache-manifest.b4eb0009fe377cb6aaa716c90433efb9.js",
+    "precache-manifest.336f1b02288bdbec5430823beeab7b1f.js": "/precache-manifest.336f1b02288bdbec5430823beeab7b1f.js",
     "service-worker.js": "/service-worker.js",
-    "static/css/main.126071af.chunk.css.map": "/static/css/main.126071af.chunk.css.map"
+    "static/css/main.6599a5e6.chunk.css.map": "/static/css/main.6599a5e6.chunk.css.map",
+    "static/media/clear-day.373f225d.svg": "/static/media/clear-day.373f225d.svg",
+    "static/media/clear-night.182ab6e8.svg": "/static/media/clear-night.182ab6e8.svg",
+    "static/media/cloudy.2e2d0f6b.svg": "/static/media/cloudy.2e2d0f6b.svg",
+    "static/media/fog.a3a58712.svg": "/static/media/fog.a3a58712.svg",
+    "static/media/hail.38a70558.svg": "/static/media/hail.38a70558.svg",
+    "static/media/partly-cloudy-day.6038ecf0.svg": "/static/media/partly-cloudy-day.6038ecf0.svg",
+    "static/media/partly-cloudy-night.4d1becdc.svg": "/static/media/partly-cloudy-night.4d1becdc.svg",
+    "static/media/rain.cb4807cc.svg": "/static/media/rain.cb4807cc.svg",
+    "static/media/sleet.5f3bdbd0.svg": "/static/media/sleet.5f3bdbd0.svg",
+    "static/media/snow.e2dcecf8.svg": "/static/media/snow.e2dcecf8.svg",
+    "static/media/thunderstorm.7cad6ca4.svg": "/static/media/thunderstorm.7cad6ca4.svg",
+    "static/media/tornado.4a222b1e.svg": "/static/media/tornado.4a222b1e.svg",
+    "static/media/wind.c627cea2.svg": "/static/media/wind.c627cea2.svg"
   }
 }

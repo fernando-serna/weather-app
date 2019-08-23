@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react'
-
 import { Store } from '../../Store'
+
 import Header from '../Header'
 import WeatherCards from '../WeatherCards'
 import { DialogComponent as Dialog } from '../Dialog'
-import { CircularProgressComponent as CircularProgress } from '../utils'
+
 import './App.css'
 
 const proxy = 'https://cors-anywhere.herokuapp.com/'
@@ -46,14 +46,14 @@ const App = () => {
     const zipDataJSON = await zipData.json()
 
     const { fields } = zipDataJSON.records[0]
-    const locations = [...state.locations, { ...fields }]
+    const locations = [{ ...fields }, ...state.locations]
     localStorage.setItem('locations', JSON.stringify(locations))
 
     const t2 = performance.now()
     console.log(`getting location took ${t2 - t1} ms`)
 
     const city = await fetchWeather(fields)
-    const cities = [...state.cities, city]
+    const cities = [city, ...state.cities]
 
     dispatch({ type: 'SET_LOCATIONS', payload: locations })
     dispatch({ type: 'SET_CITIES', payload: cities })
@@ -85,11 +85,11 @@ const App = () => {
     const locationDataJSON = await locationData.json()
 
     const { fields } = locationDataJSON.records[0]
-    const locations = [...state.locations, { ...fields }]
+    const locations = [{ ...fields }, ...state.locations]
     localStorage.setItem('locations', JSON.stringify(locations))
 
     const city = await fetchWeather(fields)
-    const cities = [...state.cities, city]
+    const cities = [city, ...state.cities]
 
     dispatch({ type: 'SET_ZIP', payload: Number(fields.zip) })
     dispatch({ type: 'SET_CITIES', payload: cities })
@@ -147,8 +147,7 @@ const App = () => {
     return null
   }
 
-  /* Fetch weather on empty weather object */
-  useEffect(() => {
+  function componentDidMount() {
     if (Object.keys(state.cities).length === 0) {
       const locationsJSON = localStorage.getItem('locations')
 
@@ -161,6 +160,12 @@ const App = () => {
         getLocation(state.currentZip)
       }
     }
+  }
+
+  /* Fetch weather on empty weather object */
+  useEffect(() => {
+    componentDidMount()
+    // eslint-disable-next-line
   }, [])
 
   /* Add window resize listener to decide whether or not chart should be rendered */
@@ -168,10 +173,6 @@ const App = () => {
     const handleResize = () => {
       setWidth(window.innerWidth)
       setHeight(window.innerHeight)
-      dispatch({
-        type: 'SET_DIMENSIONS',
-        payload: { height: window.innerHeight, width: window.innerWidth }
-      })
     }
 
     window.addEventListener('resize', handleResize)
@@ -187,7 +188,6 @@ const App = () => {
           handleLocation={() => handleLocation()}
         />
       ) : null}
-      {loading ? <CircularProgress /> : null}
       <Header refresh={locations => getNetworkCities(locations)} onOpen={() => setOpen(true)} />
       <WeatherCards width={width} height={height} loading={loading} />
     </div>
