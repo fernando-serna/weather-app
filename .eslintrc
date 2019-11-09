@@ -4,19 +4,28 @@
     "jest": true
   },
   "parser": "babel-eslint",
-  "plugins": ["prettier"],
+  "plugins": [
+    "prettier"
+  ],
   "extends": "airbnb",
   "rules": {
-    "arrow-parens": ["error", "as-needed"],
-    "comma-dangle": ["error", "only-multiline"],
-    "consistent-return": ["warn"],
-    "import/prefer-default-export": [0],
-    "jsx-a11y/label-has-for": {
-      "required": {
-        "some": ["nesting", "id"]
-      }
-    },
-    "newline-per-chained-call": ["warn"],
+    "arrow-parens": [
+      "error",
+      "as-needed"
+    ],
+    "comma-dangle": [
+      "error",
+      "only-multiline"
+    ],
+    "consistent-return": [
+      "warn"
+    ],
+    "import/prefer-default-export": [
+      0
+    ],
+    "newline-per-chained-call": [
+      "warn"
+    ],
     "object-curly-newline": [
       "error",
       {
@@ -27,7 +36,9 @@
     "react/jsx-filename-extension": [
       "error",
       {
-        "extensions": [".js"]
+        "extensions": [
+          ".js"
+        ]
       }
     ],
     "react/jsx-no-duplicate-props": [
@@ -42,8 +53,8 @@
         "allow": "single-child"
       }
     ],
-    "react/jsx-wrap-multilines": false,
-    "react/no-multi-comp": false,
+    "react/jsx-wrap-multilines": 0,
+    "react/no-multi-comp": 0,
     "react/sort-comp": [
       1,
       {
@@ -68,8 +79,6 @@
     ]
   },
   "settings": {
-    "import/resolver": {
-      "babel-module": {}
-    }
+    "import/no-unresolved": 0
   }
 }

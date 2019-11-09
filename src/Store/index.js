@@ -7,16 +7,13 @@ const initialState = {
   currentZip: 98007,
   height: null,
   width: null,
-  cities: [],
-  locations: []
+  cities: []
 }
 
 function reducer(state, action) {
   switch (action.type) {
     case 'SET_CITIES':
       return { ...state, cities: [...action.payload] }
-    case 'SET_LOCATIONS':
-      return { ...state, locations: [...action.payload] }
     case 'SET_DIMENSIONS':
       return { ...state, width: action.payload.width, height: action.payload.height }
     case 'SET_ZIP':

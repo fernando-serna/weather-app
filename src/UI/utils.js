@@ -23,17 +23,17 @@ export const IconComponent = props => {
   const components = {
     'clear-day': ClearDay,
     'clear-night': ClearNight,
-    'cloudy': Cloudy,
-    'fog': Fog,
-    'hail': Hail,
+    cloudy: Cloudy,
+    fog: Fog,
+    hail: Hail,
     'partly-cloudy-day': PartlyCloudyDay,
     'partly-cloudy-night': PartlyCloudyNight,
-    'rain': Rain,
-    'sleet': Sleet,
-    'snow': Snow,
-    'thunderstorm': Thunderstorm,
-    'tornado': Tornado,
-    'wind': Wind
+    rain: Rain,
+    sleet: Sleet,
+    snow: Snow,
+    thunderstorm: Thunderstorm,
+    tornado: Tornado,
+    wind: Wind
   }
 
   if (Object.keys(components).includes(icon)) {

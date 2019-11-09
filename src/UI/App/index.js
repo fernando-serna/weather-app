@@ -7,8 +7,9 @@ import { DialogComponent as Dialog } from '../Dialog'
 
 import './App.css'
 
-const proxy = 'https://cors-anywhere.herokuapp.com/'
-const darkSkyURL = 'https://api.darksky.net/forecast/8cfa31a60b0a43daccceb5451adb7568'
+const proxy = process.env.REACT_APP_PROXY_URL
+const darkSkyURL = process.env.REACT_APP_WEATHER_API
+const zipApiUrl = process.env.REACT_APP_ZIP_API
 
 const App = () => {
   const { state, dispatch } = useContext(Store)
@@ -16,6 +17,20 @@ const App = () => {
   const [width, setWidth] = useState(window.innerWidth)
   const [height, setHeight] = useState(window.innerHeight)
   const [loading, setLoading] = useState(false)
+  const [employeeState, setEmployee] = useState({
+    empName: null,
+    age: null,
+    depts: [],
+    groups: []
+  })
+  const [depts, setDepts] = useState([{
+    name: 'some name',
+    code: 'some code'
+  }])
+  const [groups, setGroups] = useState([{
+    name: 'some group',
+    code: 'some code'
+  }])
 
   /*
     Function to fetch longitude and latitude from provided zip code and use
@@ -26,8 +41,8 @@ const App = () => {
     const { longitude: lng, latitude: lat } = fields
 
     const weatherUrl = `${darkSkyURL}/${lat},${lng}`
-
     const weatherProxy = proxy + weatherUrl
+
     const weatherData = await fetch(weatherProxy)
     const weatherDataJSON = await weatherData.json()
 
@@ -38,26 +53,32 @@ const App = () => {
   }
 
   const getLocation = async zip => {
-    setLoading(true)
-    const t1 = performance.now()
+    setLoading(true) // show loading indicator
 
-    const zipUrl = `https://public.opendatasoft.com/api/records/1.0/search/?dataset=us-zip-code-latitude-and-longitude&q=${zip}&facet=state&facet=timezone&facet=dst`
-    const zipData = await fetch(zipUrl)
-    const zipDataJSON = await zipData.json()
+    try {
+      const t1 = performance.now() // start performance metric
 
-    const { fields } = zipDataJSON.records[0]
-    const locations = [{ ...fields }, ...state.locations]
-    localStorage.setItem('locations', JSON.stringify(locations))
+      const zipUrl = zipApiUrl.replace('ZIPCODE', zip) // replace  ZIPCODE in url with zip param
+      const zipData = await fetch(zipUrl)
+      const zipDataJSON = await zipData.json()
 
-    const t2 = performance.now()
-    console.log(`getting location took ${t2 - t1} ms`)
+      const { fields } = zipDataJSON.records[0]
+      const locations = [{ ...fields }, ...state.locations]
+      localStorage.setItem('locations', JSON.stringify(locations))
 
-    const city = await fetchWeather(fields)
-    const cities = [city, ...state.cities]
+      const t2 = performance.now()
+      console.info(`Location fetch took ${t2 - t1} ms`)
 
-    dispatch({ type: 'SET_LOCATIONS', payload: locations })
-    dispatch({ type: 'SET_CITIES', payload: cities })
-    dispatch({ type: 'SET_DIMENSIONS', payload: { height: window.innerHeight, width: window.innerWidth } })
+      const city = await fetchWeather(fields)
+      const cities = [city, ...state.cities]
+
+      dispatch({ type: 'SET_LOCATIONS', payload: locations })
+      dispatch({ type: 'SET_CITIES', payload: cities })
+      dispatch({ type: 'SET_DIMENSIONS', payload: { height: window.innerHeight, width: window.innerWidth } })
+    } catch (error) {
+      console.error({ error })
+    }
+
     setLoading(false)
   }
 
@@ -148,7 +169,7 @@ const App = () => {
   }
 
   function componentDidMount() {
-    if (Object.keys(state.cities).length === 0) {
+    if (Object.entries(state.cities).length === 0) {
       const locationsJSON = localStorage.getItem('locations')
 
       if (locationsJSON) {
@@ -164,11 +185,34 @@ const App = () => {
 
   /* Fetch weather on empty weather object */
   useEffect(() => {
-    componentDidMount()
-    // eslint-disable-next-line
+    // const initialMount = () => {
+    //   const locationJSON = sessionStorage.getItem('fs.weather.locations')
+
+    //   if (locationJSON) {
+    //     console.log('locations exist')
+    //   } else {
+    //     getLocation(state.currentZip)
+    //   }
+    // }
+
+    // // if there are no cities loaded in
+    // if (Object.entries(state.cities)) {
+    //   initialMount()
+    // }
+
+
+    let dptList = [...depts]
+    const groupLst = [...groups]
+    setEmployee({ ...employeeState, depts: dptList, groups: groupLst })
+
+    dptList = [0]
   }, [])
 
-  /* Add window resize listener to decide whether or not chart should be rendered */
+  useEffect(() => {
+    console.log({ employeeState })
+  }, [employeeState])
+
+  /* Window resize listener to decide whether or not chart should be rendered */
   useEffect(() => {
     const handleResize = () => {
       setWidth(window.innerWidth)

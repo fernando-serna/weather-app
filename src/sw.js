@@ -1,11 +1,11 @@
-if ('function' === typeof importScripts) {
-  importScripts('https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js');
+if (typeof importScripts === 'function') {
+  importScripts('https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js')
 }
 
 if (workbox) {
-  console.log(`Yay! Workbox is loaded 🎉`);
+  console.log('Yay! Workbox is loaded 🎉')
 
-  workbox.precaching.precacheAndRoute([]);
+  workbox.precaching.precacheAndRoute([])
 
   workbox.routing.registerRoute(
     new RegExp('https://cors-anywhere.herokuapp.com/'),
@@ -19,7 +19,6 @@ if (workbox) {
       ]
     })
   )
-
 } else {
-  console.log(`Boo! Workbox didn't load 😬`);
+  console.log('Boo! Workbox didn\'t load 😬')
 }
