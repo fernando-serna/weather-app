@@ -1,0 +1,28 @@
+{
+  "files": {
+    "main.css": "/fernando-serna/fernando-serna.github.io/static/css/main.22d85439.chunk.css",
+    "main.js": "/fernando-serna/fernando-serna.github.io/static/js/main.f0aa9738.chunk.js",
+    "main.js.map": "/fernando-serna/fernando-serna.github.io/static/js/main.f0aa9738.chunk.js.map",
+    "runtime~main.js": "/fernando-serna/fernando-serna.github.io/static/js/runtime~main.c6db0a78.js",
+    "runtime~main.js.map": "/fernando-serna/fernando-serna.github.io/static/js/runtime~main.c6db0a78.js.map",
+    "static/js/2.8fb81001.chunk.js": "/fernando-serna/fernando-serna.github.io/static/js/2.8fb81001.chunk.js",
+    "static/js/2.8fb81001.chunk.js.map": "/fernando-serna/fernando-serna.github.io/static/js/2.8fb81001.chunk.js.map",
+    "index.html": "/fernando-serna/fernando-serna.github.io/index.html",
+    "precache-manifest.b6be0613f99e4d7eca5d2007c160069d.js": "/fernando-serna/fernando-serna.github.io/precache-manifest.b6be0613f99e4d7eca5d2007c160069d.js",
+    "service-worker.js": "/fernando-serna/fernando-serna.github.io/service-worker.js",
+    "static/css/main.22d85439.chunk.css.map": "/fernando-serna/fernando-serna.github.io/static/css/main.22d85439.chunk.css.map",
+    "static/media/clear-day.373f225d.svg": "/fernando-serna/fernando-serna.github.io/static/media/clear-day.373f225d.svg",
+    "static/media/clear-night.182ab6e8.svg": "/fernando-serna/fernando-serna.github.io/static/media/clear-night.182ab6e8.svg",
+    "static/media/cloudy.2e2d0f6b.svg": "/fernando-serna/fernando-serna.github.io/static/media/cloudy.2e2d0f6b.svg",
+    "static/media/fog.a3a58712.svg": "/fernando-serna/fernando-serna.github.io/static/media/fog.a3a58712.svg",
+    "static/media/hail.38a70558.svg": "/fernando-serna/fernando-serna.github.io/static/media/hail.38a70558.svg",
+    "static/media/partly-cloudy-day.6038ecf0.svg": "/fernando-serna/fernando-serna.github.io/static/media/partly-cloudy-day.6038ecf0.svg",
+    "static/media/partly-cloudy-night.4d1becdc.svg": "/fernando-serna/fernando-serna.github.io/static/media/partly-cloudy-night.4d1becdc.svg",
+    "static/media/rain.cb4807cc.svg": "/fernando-serna/fernando-serna.github.io/static/media/rain.cb4807cc.svg",
+    "static/media/sleet.5f3bdbd0.svg": "/fernando-serna/fernando-serna.github.io/static/media/sleet.5f3bdbd0.svg",
+    "static/media/snow.e2dcecf8.svg": "/fernando-serna/fernando-serna.github.io/static/media/snow.e2dcecf8.svg",
+    "static/media/thunderstorm.7cad6ca4.svg": "/fernando-serna/fernando-serna.github.io/static/media/thunderstorm.7cad6ca4.svg",
+    "static/media/tornado.4a222b1e.svg": "/fernando-serna/fernando-serna.github.io/static/media/tornado.4a222b1e.svg",
+    "static/media/wind.c627cea2.svg": "/fernando-serna/fernando-serna.github.io/static/media/wind.c627cea2.svg"
+  }
+}
